@@ -1,6 +1,7 @@
-
 streamlit
 pandas
 plotly
 requests
 numpy
+xarray
+netCDF4
