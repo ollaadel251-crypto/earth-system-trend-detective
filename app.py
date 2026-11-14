@@ -79,3 +79,36 @@ if st.button("🔍 Investigate Earth Trends"):
             "NASA data analysis will be displayed here "
             "once the data connection is added."
         )
+
+st.divider()
+
+st.header("4. Understanding Cooling Strategies")
+
+st.write(
+    "Different strategies can help reduce urban heat "
+    "and improve thermal comfort."
+)
+
+st.subheader("Green Infrastructure")
+st.write(
+    "Trees, parks and vegetation can provide shade "
+    "and contribute to cooling through evapotranspiration."
+)
+
+st.subheader("Cool Roofs")
+st.write(
+    "Reflective roofing materials reduce the amount "
+    "of solar energy absorbed by buildings."
+)
+
+st.subheader("Urban Shading")
+st.write(
+    "Trees and shading structures can reduce direct "
+    "solar exposure in urban spaces."
+)
+
+st.subheader("District Cooling")
+st.write(
+    "Centralised cooling systems distribute chilled "
+    "water to multiple buildings."
+)
