@@ -18,8 +18,8 @@ st.set_page_config(
 
 DATA_DIR = Path(__file__).parent / "data"
 
-LST_FILE = DATA_DIR / "MOD11A2.061_1km_aid0001.nc"
-VEG_FILE = DATA_DIR / "MOD13Q1.061_250m_aid0001.nc"
+LST_FILE = DATA_DIR / "MOD11A2-061-Statistics.csv"
+VEG_FILE = DATA_DIR / "MOD13Q1-061-Statistics.csv"
 
 METHANE_URL = (
     "https://gml.noaa.gov/webdata/ccgg/trends/ch4/ch4_mm_gl.csv"
@@ -42,10 +42,7 @@ st.divider()
 
 REGIONS = {
     "Bahrain": (25.5, 26.5, 50.2, 50.9),
-    "Middle East": (12, 42, 25, 65),
-    "Sudan": (8, 23.5, 21, 39),
-    "Africa": (-35, 37, -18, 52),
-    "Global": None
+ 
 }
 
 
@@ -53,151 +50,74 @@ REGIONS = {
 # NASA DATA PROCESSING
 # --------------------------------------------------
 
-def find_variable(dataset, category):
+@st.cache_data(show_spinner=False)
+def load_nasa_data(file_path, category):
 
-    names = list(dataset.data_vars)
+    df = pd.read_csv(file_path)
 
-    if category == "Vegetation":
-        preferred = ["ndvi", "evi"]
-    else:
-        preferred = ["lst_day_1km", "lst_night_1km", "lst"]
-
-    for keyword in preferred:
-        for name in names:
-            if keyword in name.lower():
-                return name
-
-    raise ValueError(
-        f"Could not identify {category} data. "
-        f"Available variables: {names}"
+    # Prepare the date and measurement columns
+    df["Date"] = pd.to_datetime(
+        df["Date"],
+        errors="coerce"
     )
 
+    df["Mean"] = pd.to_numeric(
+        df["Mean"],
+        errors="coerce"
+    )
 
-@st.cache_data(show_spinner=False)
-def load_nasa_data(file_path, category, region):
+    df["Count"] = pd.to_numeric(
+        df["Count"],
+        errors="coerce"
+    )
 
-    with xr.open_dataset(
-        file_path,
-        decode_times=True,
-        mask_and_scale=True
-    ) as dataset:
+    # VEGETATION DATA (NDVI)
+    if category == "Vegetation":
 
-        variable = find_variable(dataset, category)
+        df = df[
+            df["Dataset"].str.contains(
+                "NDVI",
+                case=False,
+                na=False
+            )
+        ].copy()
 
-        data = dataset[variable]
+        df["Value"] = df["Mean"]
+        df["Series"] = "Vegetation (NDVI)"
 
-        time_dim = next(
-            (
-                dim for dim in data.dims
-                if dim.lower() in ["time", "date"]
-            ),
-            None
+    # LAND SURFACE TEMPERATURE DATA
+    elif category == "Land Surface Temperature (LST)":
+
+        df = df[
+            df["Dataset"].str.contains(
+                "LST_",
+                case=False,
+                na=False
+            )
+        ].copy()
+
+        # Convert Kelvin to Celsius
+        df["Value"] = df["Mean"] - 273.15
+
+        # Separate daytime and nighttime readings
+        df["Series"] = (
+            df["Dataset"]
+            .str.replace("LST_", "", regex=False)
+            .str.replace("_1km", "", regex=False)
+            .str.title()
         )
 
-        if time_dim is None or time_dim not in dataset.coords:
-            raise ValueError(
-                "The dataset does not contain a usable time coordinate."
-            )
+    # Remove invalid values
+    df = df.replace(
+        [np.inf, -np.inf],
+        np.nan
+    )
 
-        region_applied = region == "Global"
+    df = df.dropna(
+        subset=["Date", "Value"]
+    )
 
-        # Apply geographical filtering when latitude
-        # and longitude coordinates are available.
-
-        if region != "Global":
-
-            lat_name = next(
-                (
-                    name for name in dataset.coords
-                    if name.lower() in ["lat", "latitude"]
-                ),
-                None
-            )
-
-            lon_name = next(
-                (
-                    name for name in dataset.coords
-                    if name.lower() in ["lon", "longitude"]
-                ),
-                None
-            )
-
-            if lat_name and lon_name:
-
-                south, north, west, east = REGIONS[region]
-
-                lat = dataset[lat_name]
-                lon = dataset[lon_name]
-
-                # Convert 0–360 longitude to -180–180
-                lon = ((lon + 180) % 360) - 180
-
-                mask = (
-                    (lat >= south) &
-                    (lat <= north) &
-                    (lon >= west) &
-                    (lon <= east)
-                )
-
-                data = data.where(mask)
-                region_applied = True
-
-        # Calculate the spatial mean for each date.
-
-        spatial_dims = [
-            dim for dim in data.dims
-            if dim != time_dim
-        ]
-
-        if spatial_dims:
-            data = data.mean(
-                dim=spatial_dims,
-                skipna=True
-            )
-
-        dates = pd.to_datetime(
-            dataset[time_dim].values,
-            errors="coerce"
-        )
-
-        values = np.asarray(data.values).astype(float)
-
-        df = pd.DataFrame({
-            "Date": dates,
-            "Value": values
-        })
-
-        df = df.replace(
-            [np.inf, -np.inf],
-            np.nan
-        ).dropna()
-
-        # Apply product scaling if it was not already
-        # applied by xarray.
-
-        median_value = (
-            abs(df["Value"].median())
-            if not df.empty else 0
-        )
-
-        if category == "Vegetation" and median_value > 1.5:
-            df["Value"] = df["Value"] * 0.0001
-
-        if category == "Land Surface Temperature (LST)":
-
-            units = str(
-                dataset[variable].attrs.get("units", "")
-            ).lower()
-
-            if median_value > 1000:
-                df["Value"] = df["Value"] * 0.02
-                median_value = abs(df["Value"].median())
-
-            if "kelvin" in units or units == "k" or median_value > 150:
-                df["Value"] = df["Value"] - 273.15
-
-    return df, variable, region_applied
-
+    return df[["Date", "Value", "Series", "Count"]]
 
 # --------------------------------------------------
 # METHANE DATA
@@ -388,21 +308,19 @@ if st.button(
                     f"Processing {category} NASA data..."
                 ):
 
-                    df, variable_name, region_applied = (
-                        load_nasa_data(
-                            str(file_path),
-                            category,
-                            region
-                        )
+                   df = load_nasa_data(
+    str(file_path),
+    category
+)
                     )
 
+                                # Filter observations by selected years
                 df = df[
                     (df["Date"].dt.year >= start_year) &
                     (df["Date"].dt.year <= end_year)
-                ]
+                ].copy()
 
                 if df.empty:
-
                     st.warning(
                         "No observations were found for "
                         "the selected period."
@@ -410,28 +328,18 @@ if st.button(
                     continue
 
                 st.success(
-                    f"Successfully processed {variable_name}"
+                    f"Successfully processed {category}"
                 )
 
-                if region == "Global" or region_applied:
-
-                    st.caption(
-                        f"Geographical selection: {region}"
-                    )
-
-                else:
-
-                    st.warning(
-                        "The dataset does not contain usable "
-                        "latitude/longitude coordinates. "
-                        "The selected region could not be "
-                        "used to spatially filter these data. "
-                        "The graph represents the area contained "
-                        "in the uploaded NASA file."
-                    )
+                st.caption(
+                    "The graph represents the geographical area "
+                    "contained in the uploaded NASA dataset. "
+                    "The region selector does not spatially filter "
+                    "these CSV observations."
+                )
 
                 if category == "Vegetation":
-                    y_label = "Vegetation Index (NDVI/EVI)"
+                    y_label = "Vegetation Index (NDVI)"
                 else:
                     y_label = "Land Surface Temperature (°C)"
 
@@ -439,6 +347,7 @@ if st.button(
                     df,
                     x="Date",
                     y="Value",
+                    color="Series",
                     title=f"{category} Over Time",
                     markers=True
                 )
