@@ -18,13 +18,15 @@ st.divider()
 
 st.header("1. Select an environmental variable")
 
-variable = st.selectbox(
+variables = st.multiselect(
     "What do you want to investigate?",
     [
         "Vegetation",
-        "Land Surface Temperature",
-        "Rainfall",
-        "Soil Moisture"
+        "Land Surface Temperature (LST)"
+    ],
+    default=[
+        "Vegetation",
+        "Land Surface Temperature (LST)"
     ]
 )
 
@@ -69,7 +71,7 @@ if st.button("🔍 Investigate Earth Trends"):
     else:
         st.success("Your investigation settings are ready!")
 
-        st.write("**Variable:**", variable)
+        st.write("**Variables:**", ", ".join(variables))
         st.write("**Region:**", region)
         st.write("**Time period:**", start_year, "-", end_year)
 
