@@ -477,7 +477,7 @@ if st.button(
                             trend_data,
                             x="Date",
                             y="trend",
-                            title="Long-term Methane Trend",
+                            title=f"Smoothed Atmospheric Methane Trend ({start_year}–{end_year})",
                             labels={
                                 "Date": "Year",
                                 "trend": "Methane Trend (ppb)"
@@ -488,6 +488,63 @@ if st.button(
                             trend_fig,
                             use_container_width=True
                         )
+
+                
+                # Automatic methane trend interpretation
+                methane = methane.sort_values("Date")
+
+                first_reading = methane.iloc[0]
+                last_reading = methane.iloc[-1]
+
+                change = (
+                    last_reading["average"] -
+                    first_reading["average"]
+                )
+
+                st.subheader("What Does the Methane Data Show?")
+
+                st.write(
+                    f"Between "
+                    f"{first_reading['Date'].strftime('%b %Y')} "
+                    f"and "
+                    f"{last_reading['Date'].strftime('%b %Y')}, "
+                    f"global methane concentration changed from "
+                    f"{first_reading['average']:.2f} ppb to "
+                    f"{last_reading['average']:.2f} ppb."
+                )
+
+                if change > 0:
+                    st.success(
+                        f"Methane concentration increased by "
+                        f"{change:.2f} ppb during the selected period."
+                    )
+
+                elif change < 0:
+                    st.info(
+                        f"Methane concentration decreased by "
+                        f"{abs(change):.2f} ppb during the selected period."
+                    )
+
+                else:
+                    st.info(
+                        "Methane concentration remained unchanged "
+                        "between the first and last readings."
+                    )
+
+
+                st.subheader("Why Is Methane Important?")
+                st.write("""
+                Methane (CH₄) is a greenhouse gas that contributes to
+                global warming. It absorbs outgoing infrared radiation
+                from Earth's surface, trapping heat in the atmosphere.
+                
+                As atmospheric methane concentrations increase,
+                more heat can be retained in the climate system,
+                contributing to rising global temperatures.
+                
+                The graph allows us to observe how global atmospheric
+                methane concentrations change over time.
+                """)
 
                 st.caption(
                     "Source: NOAA Global Monitoring Laboratory. "
@@ -581,7 +638,85 @@ with st.expander("❄️ District Cooling"):
         "water to multiple buildings, helping manage "
         "cooling demand."
     )
-
+    
+    st.subheader("1. Reducing Methane Emissions")
+    
+    st.write("""
+    Reducing methane emissions is an important way to slow
+    global warming. Methane comes from sources such as livestock,
+    landfills, rice cultivation and fossil fuel production.
+    
+    Strategies include detecting and repairing gas leaks,
+    capturing methane from landfills and improving waste
+    management practices.
+    """)
+    
+    st.subheader("2. Cooling Urban Environments")
+    
+    st.write("""
+    Cities can become hotter than surrounding areas because
+    buildings, roads and other surfaces absorb and retain heat.
+    This is known as the urban heat island effect.
+    
+    Cooling strategies include:
+    - Planting more trees and expanding green spaces.
+    - Using reflective or light-coloured roofs.
+    - Creating shaded pedestrian areas.
+    - Designing buildings to improve natural ventilation.
+    """)
+    
+    st.subheader("3. Adapting to Rising Temperatures")
+    
+    st.write("""
+    Communities can prepare for higher temperatures by
+    developing heat action plans, providing shaded public
+    spaces, improving access to drinking water and creating
+    cooling centres during periods of extreme heat.
+    
+    These measures help reduce people's exposure to heat.
+    """)
+    
+    st.subheader("Mitigation vs Adaptation")
+    
+    st.write("""
+    Mitigation focuses on addressing the causes of climate
+    change, such as reducing methane emissions.
+    
+    Adaptation focuses on dealing with its effects, such as
+    creating cooler urban environments and preparing for
+    heatwaves.
+    
+    Both approaches are important for responding to
+    climate change.
+    """)
+    
+    st.subheader("4. Cooling Strategies in Bahrain")
+    
+    st.write("""
+    Bahrain experiences very hot summers, making urban cooling
+    an important part of climate adaptation. Several strategies
+    can help reduce heat exposure in residential areas and
+    public spaces.
+    
+    - **Reflective roofs:** Light-coloured and reflective
+    materials can reduce the amount of solar energy absorbed
+    by buildings.
+    
+    - **Urban greenery:** Planting suitable trees and expanding
+    green spaces can provide shade and cool surrounding areas
+    through evapotranspiration.
+    
+    - **Shaded walkways:** Covered pedestrian paths can reduce
+    direct exposure to sunlight and make outdoor spaces
+    more comfortable.
+    
+    - **Building design:** Improved insulation, ventilation
+    and energy-efficient cooling systems can help manage
+    indoor temperatures.
+    
+    These strategies are particularly relevant to Bahrain's
+    hot climate and growing urban environments.
+    """)
 
 # --------------------------------------------------
 # DATA SOURCES
