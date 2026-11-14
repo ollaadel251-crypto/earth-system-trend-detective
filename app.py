@@ -302,19 +302,19 @@ if st.button(
                 )
                 continue
 
+           
             try:
 
                 with st.spinner(
                     f"Processing {category} NASA data..."
                 ):
 
-                   df = load_nasa_data(
-    str(file_path),
-    category
-)
+                    df = load_nasa_data(
+                        str(file_path),
+                        category
                     )
 
-                                # Filter observations by selected years
+                # Filter observations by selected years
                 df = df[
                     (df["Date"].dt.year >= start_year) &
                     (df["Date"].dt.year <= end_year)
@@ -386,6 +386,7 @@ if st.button(
                     df,
                     use_container_width=True
                 )
+
 
             except Exception as error:
 
