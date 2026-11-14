@@ -603,120 +603,130 @@ st.write(
 
 st.divider()
 
+
+# --------------------------------------------------
+# 6. UNDERSTANDING COOLING STRATEGIES
+# --------------------------------------------------
+
 st.header("6. Understanding Cooling Strategies")
 
 st.write(
-    "Different strategies can help reduce urban heat "
-    "and improve thermal comfort."
+    "Different strategies can help reduce urban heat, "
+    "manage energy consumption and improve thermal comfort."
 )
 
+# GREEN INFRASTRUCTURE
 with st.expander("🌳 Green Infrastructure"):
 
-    st.write(
-        "Trees, parks and vegetation provide shade and "
-        "contribute to cooling through evapotranspiration."
-    )
+    st.write("""
+    Trees, parks and vegetation provide shade and contribute
+    to cooling through evapotranspiration. Expanding green
+    spaces can help reduce temperatures in urban areas.
+    """)
 
+# COOL ROOFS
 with st.expander("🏠 Cool Roofs"):
 
-    st.write(
-        "Reflective roofing materials reduce the amount "
-        "of solar energy absorbed by buildings."
-    )
+    st.write("""
+    Reflective roofing materials reduce the amount of solar
+    energy absorbed by buildings. This can lower indoor
+    temperatures and reduce cooling demand.
+    """)
 
+# URBAN SHADING
 with st.expander("🌿 Urban Shading"):
 
-    st.write(
-        "Trees and shading structures reduce direct "
-        "solar exposure in urban spaces."
-    )
+    st.write("""
+    Trees, shaded walkways and shading structures reduce
+    direct solar exposure in urban spaces, making outdoor
+    environments more comfortable.
+    """)
 
+# DISTRICT COOLING
 with st.expander("❄️ District Cooling"):
 
-    st.write(
-        "Centralised cooling systems distribute chilled "
-        "water to multiple buildings, helping manage "
-        "cooling demand."
-    )
-    
-    st.subheader("1. Reducing Methane Emissions")
-    
     st.write("""
-    Reducing methane emissions is an important way to slow
-    global warming. Methane comes from sources such as livestock,
-    landfills, rice cultivation and fossil fuel production.
-    
-    Strategies include detecting and repairing gas leaks,
-    capturing methane from landfills and improving waste
-    management practices.
+    Centralised cooling systems distribute chilled water
+    to multiple buildings through a network of pipes.
+    This can improve cooling efficiency and help manage
+    electricity demand compared with separate cooling
+    systems in individual buildings.
     """)
-    
-    st.subheader("2. Cooling Urban Environments")
-    
-    st.write("""
-    Cities can become hotter than surrounding areas because
-    buildings, roads and other surfaces absorb and retain heat.
-    This is known as the urban heat island effect.
-    
-    Cooling strategies include:
-    - Planting more trees and expanding green spaces.
-    - Using reflective or light-coloured roofs.
-    - Creating shaded pedestrian areas.
-    - Designing buildings to improve natural ventilation.
-    """)
-    
-    st.subheader("3. Adapting to Rising Temperatures")
-    
-    st.write("""
-    Communities can prepare for higher temperatures by
-    developing heat action plans, providing shaded public
-    spaces, improving access to drinking water and creating
-    cooling centres during periods of extreme heat.
-    
-    These measures help reduce people's exposure to heat.
-    """)
-    
-    st.subheader("Mitigation vs Adaptation")
-    
-    st.write("""
-    Mitigation focuses on addressing the causes of climate
-    change, such as reducing methane emissions.
-    
-    Adaptation focuses on dealing with its effects, such as
-    creating cooler urban environments and preparing for
-    heatwaves.
-    
-    Both approaches are important for responding to
-    climate change.
-    """)
-    
-    st.subheader("4. Cooling Strategies in Bahrain")
-    
-    st.write("""
-    Bahrain experiences very hot summers, making urban cooling
-    an important part of climate adaptation. Several strategies
-    can help reduce heat exposure in residential areas and
-    public spaces.
-    
-    - **Reflective roofs:** Light-coloured and reflective
-    materials can reduce the amount of solar energy absorbed
-    by buildings.
-    
-    - **Urban greenery:** Planting suitable trees and expanding
-    green spaces can provide shade and cool surrounding areas
-    through evapotranspiration.
-    
-    - **Shaded walkways:** Covered pedestrian paths can reduce
-    direct exposure to sunlight and make outdoor spaces
-    more comfortable.
-    
-    - **Building design:** Improved insulation, ventilation
-    and energy-efficient cooling systems can help manage
-    indoor temperatures.
-    
-    These strategies are particularly relevant to Bahrain's
-    hot climate and growing urban environments.
-    """)
+
+# METHANE REDUCTION
+st.subheader("Reducing Methane Emissions")
+
+st.write("""
+Reducing methane emissions is an important way to slow
+global warming. Methane comes from sources such as livestock,
+landfills, rice cultivation and fossil fuel production.
+
+Strategies include detecting and repairing gas leaks,
+capturing methane from landfills and improving waste
+management practices.
+""")
+
+# URBAN HEAT ISLAND EFFECT
+st.subheader("Understanding the Urban Heat Island Effect")
+
+st.write("""
+Cities can become hotter than surrounding areas because
+buildings, roads and other surfaces absorb and retain heat.
+This is known as the urban heat island effect.
+
+Increasing vegetation, using reflective materials and
+creating shaded public spaces can help reduce this effect.
+""")
+
+# ADAPTATION
+st.subheader("Adapting to Rising Temperatures")
+
+st.write("""
+Communities can prepare for higher temperatures by
+developing heat action plans, providing shaded public
+spaces, improving access to drinking water and creating
+cooling centres during periods of extreme heat.
+
+These measures help reduce people's exposure to heat.
+""")
+
+# BAHRAIN
+st.subheader("Cooling Strategies in Bahrain")
+
+st.write("""
+Bahrain experiences very hot summers, making urban cooling
+an important part of climate adaptation.
+
+Examples of relevant strategies include:
+
+- **Reflective roofs:** Light-coloured materials reduce
+  the amount of solar energy absorbed by buildings.
+
+- **Urban greenery:** Suitable trees and green spaces
+  provide shade and cooling through evapotranspiration.
+
+- **Shaded walkways:** Covered pedestrian paths reduce
+  direct exposure to sunlight.
+
+- **Building design:** Improved insulation and ventilation
+  can help manage indoor temperatures.
+
+These strategies are relevant to Bahrain's hot climate
+and growing urban environments.
+""")
+
+# MITIGATION VS ADAPTATION
+st.subheader("Mitigation vs Adaptation")
+
+st.write("""
+**Mitigation** focuses on addressing the causes of climate
+change, such as reducing methane emissions.
+
+**Adaptation** focuses on dealing with its effects, such as
+creating cooler urban environments and preparing for heatwaves.
+
+Both approaches are important for responding to climate change.
+""")
 
 # --------------------------------------------------
 # DATA SOURCES
