@@ -551,16 +551,75 @@ if st.button(
                     "Recent measurements may be preliminary."
                 )
 
+      
         except Exception as error:
 
             st.error(
                 f"Could not load methane measurements: {error}"
             )
 
+        # --------------------------------------------------
+        # BAHRAIN METHANE PLUME INVESTIGATION
+        # AWALI OIL & GAS
+        # --------------------------------------------------
+
+        st.divider()
+
+        st.header("🇧🇭 Methane Plumes in Bahrain")
+
+        st.subheader("Awali Oil & Gas")
+
+        st.write(
+            "Satellite monitoring identified two large methane "
+            "plume events at Awali Oil & Gas in Bahrain. "
+            "The measurements below show the reported emission "
+            "rates on each detection date."
+        )
+
+        awali_data = pd.DataFrame({
+            "Date": [
+                "12 July 2024",
+                "18 May 2025"
+            ],
+            "Methane Emission Rate (kg/h)": [
+                10018,
+                5578
+            ]
+        })
+
+        awali_fig = px.bar(
+            awali_data,
+            x="Date",
+            y="Methane Emission Rate (kg/h)",
+            title="Reported Methane Plume Rates at Awali",
+            text="Methane Emission Rate (kg/h)"
+        )
+
+        awali_fig.update_traces(
+            texttemplate="%{text:,.0f} kg/h",
+            textposition="outside"
+        )
+
+        awali_fig.update_layout(
+            xaxis_title="Detection Date",
+            yaxis_title="Methane Emission Rate (kg/h)",
+            yaxis_range=[0, 11500]
+        )
+
+        st.plotly_chart(
+            awali_fig,
+            use_container_width=True
+        )
+
+        st.caption(
+            "Source: UNEP MARS figures as reported in the "
+            "project research document. These are individual "
+            "plume detections, not annual emissions."
+        )
+
         st.success(
             "Your environmental investigation is complete!"
         )
-
 
 # --------------------------------------------------
 # 5. UNDERSTANDING METHANE
