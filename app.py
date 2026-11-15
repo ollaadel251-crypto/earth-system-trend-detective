@@ -350,7 +350,7 @@ variables = st.multiselect(
 
 
 # --------------------------------------------------
-# 2. SELECT REGION
+# 2. SELECT COUNTRY
 # --------------------------------------------------
 
 st.header("2. Select your geographical country")
@@ -418,7 +418,7 @@ if st.button(
         st.header("📊 Your Environmental Investigation")
 
         st.write(
-            f"**Region:** {region}  \n"
+           f"**Country:** {selected_country}  \n"
             f"**Period:** {start_year}–{end_year}"
         )
 
