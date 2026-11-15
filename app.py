@@ -893,6 +893,240 @@ creating cooler urban environments and preparing for heatwaves.
 Both approaches are important for responding to climate change.
 """)
 
+
+# --------------------------------------------------
+# 7. MONTROSE VERIPLUME DEVICE
+# --------------------------------------------------
+
+st.divider()
+
+st.header("7. Montrose VeriPlume: Detecting Methane Emissions")
+
+st.write("""
+While NASA satellite observations help identify environmental
+changes over large areas, ground-based monitoring devices
+can help investigate individual methane emission sources.
+""")
+
+with st.expander("🔬 Discover the Montrose VeriPlume Capture System", expanded=True):
+
+    st.subheader("What is the VeriPlume device?")
+
+    st.write("""
+    The Montrose VeriPlume Capture System is a methane
+    monitoring technology developed by Montrose Environmental
+    Group.
+
+    Introduced in January 2026, it is designed to capture
+    and measure emissions from high-volume methane vents,
+    particularly in the oil and gas industry.
+    """)
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.metric("Main target", "Methane (CH₄)")
+        st.metric("Main application", "Oil & Gas")
+
+    with col2:
+        st.metric("Monitoring approach", "Ground-based")
+        st.metric("Main purpose", "Emission detection")
+
+    st.subheader("How does it work?")
+
+    st.write("""
+    - Uses a lightweight carbon-fibre telescoping pole.
+    - Allows technicians to sample emissions from ground level.
+    - Captures and measures methane released from high-volume vents.
+    - Helps operators identify and prioritize significant
+      emission sources for repair.
+    """)
+
+    st.subheader("How could Bahrain benefit?")
+
+    st.write("""
+    Bahrain could explore using similar monitoring technology
+    around oil and gas facilities to identify significant
+    methane leaks and prioritize maintenance.
+
+    This could complement satellite observations by providing
+    more detailed information about specific emission sources.
+    """)
+
+    st.info("""
+    **Important distinction:** NASA satellite observations
+    identify broad environmental patterns, while VeriPlume
+    is a ground-based emission sampling system. It does not
+    replace satellite monitoring or continuous monitoring
+    systems, and its use in Bahrain is a proposed application,
+    not an existing deployment.
+    """)
+
+
+# --------------------------------------------------
+# 8. PROPOSED SUSTAINABLE SOLUTIONS FOR BAHRAIN
+# --------------------------------------------------
+
+st.divider()
+
+st.header("8. Proposed Sustainable Solutions for Bahrain")
+
+st.write("""
+Based on the environmental challenges explored in this app,
+the following solutions could help Bahrain reduce methane
+emissions, manage rising temperatures and improve vegetation.
+""")
+
+solutions = [
+    {
+        "title": "🌳 1. Urban Greening",
+        "problem": "Limited vegetation and increasing urban heat.",
+        "solution": "Plant drought-resistant trees and expand green spaces in identified heat hotspots.",
+        "impact": "Provides shade, supports vegetation and helps reduce local surface heating.",
+        "sdgs": "SDG 11 and SDG 15"
+    },
+    {
+        "title": "🚌 2. Shaded Public Spaces",
+        "problem": "High outdoor temperatures and direct solar exposure.",
+        "solution": "Introduce shaded walkways, bus stops and public seating areas.",
+        "impact": "Reduces direct exposure to sunlight and improves outdoor thermal comfort.",
+        "sdgs": "SDG 3 and SDG 11"
+    },
+    {
+        "title": "🏠 3. Cool Roofs and Reflective Pavements",
+        "problem": "Buildings and roads absorb and retain solar heat.",
+        "solution": "Use reflective roofing materials and suitable cool pavement technologies.",
+        "impact": "Reduces heat absorption and may lower cooling demand in buildings.",
+        "sdgs": "SDG 11 and SDG 13"
+    },
+    {
+        "title": "♻️ 4. Methane Recovery at Landfills",
+        "problem": "Decomposing organic waste releases methane.",
+        "solution": "Introduce methane capture and recovery systems at suitable landfill sites, including Askar.",
+        "impact": "Captures methane that would otherwise escape and allows potential energy recovery.",
+        "sdgs": "SDG 7 and SDG 13"
+    },
+    {
+        "title": "🌱 5. Organic Waste Management",
+        "problem": "Organic waste sent to landfills contributes to methane generation.",
+        "solution": "Separate food and garden waste and introduce composting programmes.",
+        "impact": "Reduces the amount of biodegradable waste sent to landfills.",
+        "sdgs": "SDG 12 and SDG 13"
+    },
+    {
+        "title": "💧 6. Water-Efficient Landscaping",
+        "problem": "Maintaining vegetation in Bahrain's hot, dry climate requires careful water management.",
+        "solution": "Use drought-tolerant plants and efficient irrigation systems.",
+        "impact": "Supports sustainable green spaces while reducing unnecessary water consumption.",
+        "sdgs": "SDG 11 and SDG 15"
+    }
+]
+
+for solution in solutions:
+
+    with st.expander(solution["title"]):
+
+        st.markdown(f"**Environmental challenge:** {solution['problem']}")
+
+        st.markdown(f"**Proposed solution:** {solution['solution']}")
+
+        st.markdown(f"**Expected environmental benefit:** {solution['impact']}")
+
+        st.success(f"Related goals: {solution['sdgs']}")
+
+
+# --------------------------------------------------
+# 9. CONNECTIONS TO THE UNITED NATIONS SDGs
+# --------------------------------------------------
+
+st.divider()
+
+st.header("9. Connections to the Sustainable Development Goals")
+
+st.write("""
+Our project supports several United Nations Sustainable
+Development Goals (SDGs). By combining satellite observations,
+methane monitoring and proposed environmental solutions,
+we can connect scientific investigation to sustainable action.
+""")
+
+sdgs = [
+    {
+        "number": "SDG 3",
+        "name": "Good Health and Well-being",
+        "description": "Reducing exposure to extreme heat and air pollution through better environmental management.",
+        "connection": "Shaded public spaces, heat adaptation and methane emission reduction."
+    },
+    {
+        "number": "SDG 7",
+        "name": "Affordable and Clean Energy",
+        "description": "Supporting more efficient energy use and exploring energy recovery from captured landfill methane.",
+        "connection": "Methane recovery and improved energy management."
+    },
+    {
+        "number": "SDG 9",
+        "name": "Industry, Innovation and Infrastructure",
+        "description": "Encouraging environmental monitoring technology and more sustainable industrial infrastructure.",
+        "connection": "Montrose VeriPlume and improved methane monitoring."
+    },
+    {
+        "number": "SDG 11",
+        "name": "Sustainable Cities and Communities",
+        "description": "Developing urban environments that are more resilient to extreme temperatures.",
+        "connection": "Urban greening, shaded walkways and reflective building materials."
+    },
+    {
+        "number": "SDG 12",
+        "name": "Responsible Consumption and Production",
+        "description": "Improving waste management and reducing biodegradable waste sent to landfills.",
+        "connection": "Organic waste separation and composting."
+    },
+    {
+        "number": "SDG 13",
+        "name": "Climate Action",
+        "description": "Monitoring greenhouse gas trends and introducing measures to reduce emissions and adapt to climate change.",
+        "connection": "Methane detection, methane recovery and urban cooling."
+    },
+    {
+        "number": "SDG 15",
+        "name": "Life on Land",
+        "description": "Supporting terrestrial ecosystems and protecting vegetation through sustainable land management.",
+        "connection": "Drought-resistant planting and water-efficient landscaping."
+    }
+]
+
+for i in range(0, len(sdgs), 2):
+
+    col1, col2 = st.columns(2)
+
+    for col, sdg in zip(
+        [col1, col2],
+        sdgs[i:i+2]
+    ):
+
+        with col:
+
+            with st.container(border=True):
+
+                st.subheader(sdg["number"])
+
+                st.markdown(f"**{sdg['name']}**")
+
+                st.write(sdg["description"])
+
+                st.caption(
+                    f"Project connection: {sdg['connection']}"
+                )
+
+
+st.success("""
+🌍 **Our overall contribution**
+
+By combining NASA environmental data, methane monitoring
+technology and practical solutions, our project aims to
+support a cooler, greener and more sustainable Bahrain.
+""")
+
 # --------------------------------------------------
 # DATA SOURCES
 # --------------------------------------------------
@@ -906,6 +1140,7 @@ st.markdown(
     - NASA MODIS MOD11A2: Land Surface Temperature.
     - NASA MODIS MOD13Q1: Vegetation Indices.
     - NOAA Global Monitoring Laboratory: Atmospheric Methane.
+    - Montrose Environmental Group: VeriPlume Capture System.
     
     NASA and NOAA datasets are presented separately because
     they measure different environmental variables.
