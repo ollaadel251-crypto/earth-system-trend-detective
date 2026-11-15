@@ -32,7 +32,7 @@ agency_logo = ASSETS_DIR / "bsa_logo.png"
 
 with col1:
     if school_logo.exists():
-        st.image(str(school_logo), width=350)
+        st.image(str(school_logo), width=500)
     else:
         st.warning("School logo not found.")
 
