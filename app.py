@@ -123,14 +123,63 @@ if video_path.exists():
 else:
     st.warning("Bahrain HeatShield video not found.")
 # --------------------------------------------------
-# REGION DEFINITIONS
+# COUNTRY SELECTOR
 # --------------------------------------------------
 
-REGIONS = {
-    "Bahrain": (25.5, 26.5, 50.2, 50.9),
- 
+st.subheader("🌍 Select a Country")
+
+COUNTRIES = {
+    "Bahrain": {
+        "lat_min": 25.5,
+        "lat_max": 26.5,
+        "lon_min": 50.3,
+        "lon_max": 50.9
+    },
+    "Qatar": {
+        "lat_min": 24.4,
+        "lat_max": 26.2,
+        "lon_min": 50.6,
+        "lon_max": 51.8
+    },
+    "United Arab Emirates": {
+        "lat_min": 22.5,
+        "lat_max": 26.1,
+        "lon_min": 51.5,
+        "lon_max": 56.5
+    }
 }
 
+selected_country = st.selectbox(
+    "Choose a country to investigate:",
+    list(COUNTRIES.keys())
+)
+
+country_bounds = COUNTRIES[selected_country]
+
+st.success(f"Currently investigating: {selected_country}")
+
+
+# COUNTRY INTRODUCTION
+
+country_descriptions = {
+    "Bahrain": "An island nation facing extreme heat, limited vegetation and waste-management challenges.",
+    "Qatar": "A Gulf country experiencing high temperatures, limited vegetation and environmental pressures.",
+    "United Arab Emirates": "A Gulf country facing extreme heat, water scarcity and urban environmental challenges."
+}
+
+st.write(country_descriptions[selected_country])
+
+# GEOGRAPHIC FILTERING
+
+def filter_by_country(df, lat_col="latitude", lon_col="longitude"):
+    bounds = COUNTRIES[selected_country]
+
+    return df[
+        (df[lat_col] >= bounds["lat_min"]) &
+        (df[lat_col] <= bounds["lat_max"]) &
+        (df[lon_col] >= bounds["lon_min"]) &
+        (df[lon_col] <= bounds["lon_max"])
+    ].copy()
 
 # --------------------------------------------------
 # NASA DATA PROCESSING
