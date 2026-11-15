@@ -42,6 +42,68 @@ understanding rising temperatures and exploring possible
 solutions for a more sustainable future.
 """)
 
+# --------------------------------------------------
+# THE ENVIRONMENTAL PROBLEM
+# --------------------------------------------------
+
+st.divider()
+
+st.header("⚠️ The Environmental Problem")
+
+st.markdown("""
+Bahrain faces environmental challenges associated with
+high temperatures, urban development and greenhouse gas
+emissions.
+
+Urban areas can experience increased surface temperatures
+because buildings and roads absorb and retain solar energy.
+Limited vegetation can also reduce natural shade and cooling.
+
+Methane is another important concern. It is a powerful
+greenhouse gas released through activities such as waste
+disposal and fossil fuel production. Its accumulation in
+the atmosphere contributes to global warming.
+
+Understanding these challenges requires examining
+environmental data, identifying emission sources and
+considering how human activities influence the environment.
+""")
+
+# --------------------------------------------------
+# THE PROPOSED SOLUTION
+# --------------------------------------------------
+
+st.divider()
+
+st.header("💡 The Proposed Solution")
+
+st.markdown("""
+This project uses environmental data and monitoring
+technology to investigate environmental changes and
+explore possible solutions for Bahrain.
+
+The proposed approach combines:
+
+**1. Environmental data analysis**
+Using NASA satellite observations to investigate land
+surface temperature and vegetation changes.
+
+**2. Methane monitoring**
+Using NOAA atmospheric measurements to examine global
+methane trends and exploring technologies such as the
+Montrose VeriPlume system to investigate individual
+emission sources.
+
+**3. Sustainable environmental strategies**
+Proposing practical measures such as urban greening,
+reflective roofs, improved waste management and methane
+recovery.
+
+Together, these approaches aim to support better
+environmental understanding and encourage a cooler,
+greener and more sustainable Bahrain.
+""")
+
 DATA_DIR = Path(__file__).parent / "data"
 
 LST_FILE = DATA_DIR / "MOD11A2-061-Statistics.csv"
