@@ -16,6 +16,32 @@ st.set_page_config(
     layout="wide"
 )
 
+# --------------------------------------------------
+# INTRODUCTION
+# --------------------------------------------------
+
+st.title("🌍 Earth System Trend Detective")
+
+st.subheader("Understanding the relationship between land surface temperature and methane")
+
+st.markdown("""
+Welcome to the Earth System Trend Detective!
+
+This application explores environmental changes using scientific
+data from NASA and NOAA. It focuses on land surface temperature,
+vegetation and atmospheric methane to help investigate changes
+in Earth's environment over time.
+
+By analysing satellite observations and atmospheric measurements,
+users can explore environmental trends, identify possible
+relationships and understand how human activities contribute
+to environmental challenges.
+
+The project focuses on Bahrain, examining the importance of
+understanding rising temperatures and exploring possible
+solutions for a more sustainable future.
+""")
+
 DATA_DIR = Path(__file__).parent / "data"
 
 LST_FILE = DATA_DIR / "MOD11A2-061-Statistics.csv"
