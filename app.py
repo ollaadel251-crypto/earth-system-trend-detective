@@ -44,32 +44,17 @@ with col3:
 
 st.divider()
 
-# --------------------------------------------------
 # INTRODUCTION
-# --------------------------------------------------
 
 st.title("🌍 Earth System Trend Detective")
 
-st.subheader("Understanding the relationship between land surface temperature and methane")
-
-st.markdown("""
-Welcome to the Earth System Trend Detective!
-
-This application explores environmental changes using scientific
-data from NASA and NOAA. It focuses on land surface temperature,
-vegetation and atmospheric methane to help investigate changes
-in Earth's environment over time.
-
-By analysing satellite observations and atmospheric measurements,
-users can explore environmental trends, identify possible
-relationships and understand how human activities contribute
-to environmental challenges.
-
-The project focuses on Bahrain, examining the importance of
-understanding rising temperatures and exploring possible
-solutions for a more sustainable future.
-""")
-
+st.write(
+    "Bahrain faces environmental challenges from extreme heat, "
+    "limited vegetation and landfill waste. Our project uses "
+    "satellite and environmental data to track changes in "
+    "temperature, vegetation and methane, turning complex "
+    "information into clear evidence for better sustainability decisions."
+)
 # --------------------------------------------------
 # THE ENVIRONMENTAL PROBLEM
 # --------------------------------------------------
