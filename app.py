@@ -536,20 +536,23 @@ if st.button(
                 )
                 continue
                 
-        try:
-            with st.spinner(
-                f"Processing {category} NASA data..."
-         ):
+           try:
+
+        with st.spinner(
+            f"Processing {category} NASA data..."
+        ):
+
             df = load_nasa_data(
                 str(file_path),
                 category,
                 selected_country
             )
-                # Filter observations by selected years
-                df = df[
-                    (df["Date"].dt.year >= start_year) &
-                    (df["Date"].dt.year <= end_year)
-                ].copy()
+
+        # Filter observations by selected years
+        df = df[
+            (df["Date"].dt.year >= start_year) &
+            (df["Date"].dt.year <= end_year)
+        ].copy()
 
                 if df.empty:
                     st.warning(
