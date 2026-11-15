@@ -43,9 +43,9 @@ with col3:
         st.warning("Bahrain Space Agency logo not found.")
 
 st.divider()
-
+# --------------------------------------------------
 # INTRODUCTION
-
+# --------------------------------------------------
 st.title("🌍 Earth System Trend Detective")
 
 st.write(
@@ -55,7 +55,9 @@ st.write(
     "temperature, vegetation and methane, turning complex "
     "information into clear evidence for better sustainability decisions."
 )
+# --------------------------------------------------
 # ENVIRONMENTAL PROBLEM
+# --------------------------------------------------
 
 st.header("⚠️ The Environmental Challenge")
 
@@ -77,55 +79,32 @@ st.write(
 # THE PROPOSED SOLUTION
 # --------------------------------------------------
 
-st.divider()
 
-st.header("💡 The Proposed Solution")
-
-st.markdown("""
-This project uses environmental data and monitoring
-technology to investigate environmental changes and
-explore possible solutions for Bahrain.
-
-The proposed approach combines:
-
-**1. Environmental data analysis**
-Using NASA satellite observations to investigate land
-surface temperature and vegetation changes.
-
-**2. Methane monitoring**
-Using NOAA atmospheric measurements to examine global
-methane trends and exploring technologies such as the
-Montrose VeriPlume system to investigate individual
-emission sources.
-
-**3. Sustainable environmental strategies**
-Proposing practical measures such as urban greening,
-reflective roofs, improved waste management and methane
-recovery.
-
-Together, these approaches aim to support better
-environmental understanding and encourage a cooler,
-greener and more sustainable Bahrain.
-""")
-
-DATA_DIR = Path(__file__).parent / "data"
-
-LST_FILE = DATA_DIR / "MOD11A2-061-Statistics.csv"
-VEG_FILE = DATA_DIR / "MOD13Q1-061-Statistics.csv"
-
-METHANE_URL = (
-    "https://gml.noaa.gov/webdata/ccgg/trends/ch4/ch4_mm_gl.csv"
-)
-
-st.title("🌍 Earth System Trend Detective")
+st.header("💡 Our Proposed Solution")
 
 st.write(
-    "Investigate changes in Earth's environment "
-    "using NASA satellite observations and atmospheric "
-    "methane measurements."
+    "We are developing an interactive platform focused on Bahrain. "
+    "It is designed to let users explore environmental variables, "
+    "view maps and time-series graphs, and interpret the direction "
+    "and rate of change. The platform connects three related but "
+    "distinct lines of investigation:"
 )
 
-st.divider()
+st.markdown("""
+| **Investigation** | **Data source** | **What it tells us** |
+|---|---|---|
+| **Land surface temperature (LST)** | NASA MODIS MOD11A2 | How the temperature of the land surface changes over time and across locations (every 8 days at 1 km resolution). |
+| **Vegetation** | NASA MODIS MOD13Q1 (NDVI/EVI) | How vegetation greenness and condition vary across Bahrain (16 days at 250 m resolution). |
+| **Atmospheric methane / large plumes** | Sentinel-5P TROPOMI and UNEP MARS | Atmospheric methane concentrations or individual large methane plume events; these are not the same as direct site-level emission measurements. |
+""")
+
+st.info(
+    "**Important distinction:** MODIS measures land-surface temperature "
+    "and vegetation indices; it does not measure methane. Methane "
+    "information must come from methane-specific satellite products "
+    "or emission inventories. The website should label each dataset "
+    "and unit clearly."
+)
 
 # BAHRAIN HEATSHIELD VIDEO
 
