@@ -151,7 +151,22 @@ st.write(
 
 st.divider()
 
+# BAHRAIN HEATSHIELD VIDEO
 
+st.subheader("🎥 Bahrain HeatShield")
+
+st.write(
+    "The following video introduces Bahrain HeatShield "
+    "and demonstrates an approach to addressing the "
+    "challenges of rising temperatures in Bahrain."
+)
+
+video_path = ASSETS_DIR / "bahrain_heatshield.mp4"
+
+if video_path.exists():
+    st.video(str(video_path))
+else:
+    st.warning("Bahrain HeatShield video not found.")
 # --------------------------------------------------
 # REGION DEFINITIONS
 # --------------------------------------------------
