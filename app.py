@@ -816,150 +816,141 @@ if st.button(
                 f"Could not load methane measurements: {error}"
             )
 
+       
         # --------------------------------------------------
-        # BAHRAIN METHANE PLUME INVESTIGATION
-        # AWALI OIL & GAS
+        # BAHRAIN-ONLY METHANE DATA
         # --------------------------------------------------
-
-        st.divider()
-
-        st.header("🇧🇭 Methane Plumes in Bahrain")
 
         if selected_country == "Bahrain":
-            
-        st.subheader("Awali Oil & Gas")
 
-        st.write(
-            "Satellite monitoring identified two large methane "
-            "plume events at Awali Oil & Gas in Bahrain. "
-            "The measurements below show the reported emission "
-            "rates on each detection date."
-        )
+            st.divider()
 
-        awali_data = pd.DataFrame({
-            "Date": [
-                "12 July 2024",
-                "18 May 2025"
-            ],
-            "Methane Emission Rate (kg/h)": [
-                10018,
-                5578
-            ]
-        })
+            st.header("🇧🇭 Methane Plumes in Bahrain")
 
-        awali_fig = px.bar(
-            awali_data,
-            x="Date",
-            y="Methane Emission Rate (kg/h)",
-            title="Reported Methane Plume Rates at Awali",
-            text="Methane Emission Rate (kg/h)"
-        )
+            st.subheader("Awali Oil & Gas")
 
-        awali_fig.update_traces(
-            texttemplate="%{text:,.0f} kg/h",
-            textposition="outside"
-        )
+            st.write(
+                "Satellite monitoring identified two large methane "
+                "plume events at Awali Oil & Gas in Bahrain. "
+                "The measurements below show the reported emission "
+                "rates on each detection date."
+            )
 
-        awali_fig.update_layout(
-            xaxis_title="Detection Date",
-            yaxis_title="Methane Emission Rate (kg/h)",
-            yaxis_range=[0, 11500]
-        )
+            awali_data = pd.DataFrame({
+                "Date": [
+                    "12 July 2024",
+                    "18 May 2025"
+                ],
+                "Methane Emission Rate (kg/h)": [
+                    10018,
+                    5578
+                ]
+            })
 
-        st.plotly_chart(
-            awali_fig,
-            use_container_width=True
-        )
+            awali_fig = px.bar(
+                awali_data,
+                x="Date",
+                y="Methane Emission Rate (kg/h)",
+                title="Reported Methane Plume Rates at Awali",
+                text="Methane Emission Rate (kg/h)"
+            )
 
-        st.caption(
-            "Source: UNEP MARS figures as reported in the "
-            "project research document. These are individual "
-            "plume detections, not annual emissions."
-        )
+            awali_fig.update_traces(
+                texttemplate="%{text:,.0f} kg/h",
+                textposition="outside"
+            )
 
-        
-        # --------------------------------------------------
-        # WASTE-SECTOR METHANE EMISSIONS
-        # BAHRAIN
-        # --------------------------------------------------
+            awali_fig.update_layout(
+                xaxis_title="Detection Date",
+                yaxis_title="Methane Emission Rate (kg/h)",
+                yaxis_range=[0, 11500]
+            )
 
-        st.divider()
+            st.plotly_chart(
+                awali_fig,
+                use_container_width=True
+            )
 
-        st.subheader("Methane Emissions from Bahrain's Waste Sector")
+            st.caption(
+                "Source: UNEP MARS figures as reported in the "
+                "project research document. These are individual "
+                "plume detections, not annual emissions."
+            )
 
-        st.write(
-            "The project research reports an increase in annual "
-            "waste-sector methane emissions between 2015 and 2022. "
-            "The figures below are based on the annual estimates "
-            "provided in the research document."
-        )
+            # WASTE-SECTOR METHANE
 
-        waste_data = pd.DataFrame({
-            "Year": [
-                2015, 2016, 2017, 2018,
-                2019, 2020, 2021, 2022
-            ],
-            "Methane Emissions (Metric Tons)": [
-                32200, 33700, 34800, 35800,
-                36900, 37800, 38900, 39900
-            ]
-        })
+            st.divider()
 
-        waste_fig = px.line(
-            waste_data,
-            x="Year",
-            y="Methane Emissions (Metric Tons)",
-            title="Annual Waste-Sector Methane Emissions (2015–2022)",
-            markers=True
-        )
+            st.subheader(
+                "Methane Emissions from Bahrain's Waste Sector"
+            )
 
-        waste_fig.update_layout(
-            xaxis_title="Year",
-            yaxis_title="Methane Emissions (Metric Tons)",
-            hovermode="x unified"
-        )
+            st.write(
+                "The project research reports an increase in annual "
+                "waste-sector methane emissions between 2015 and 2022."
+            )
 
-        st.plotly_chart(
-            waste_fig,
-            use_container_width=True
-        )
+            waste_data = pd.DataFrame({
+                "Year": [
+                    2015, 2016, 2017, 2018,
+                    2019, 2020, 2021, 2022
+                ],
+                "Methane Emissions (Metric Tons)": [
+                    32200, 33700, 34800, 35800,
+                    36900, 37800, 38900, 39900
+                ]
+            })
 
-        st.metric(
-            "Increase from 2015 to 2022",
-            "7,700 metric tons",
-            delta="+23.9%"
-        )
+            waste_fig = px.line(
+                waste_data,
+                x="Year",
+                y="Methane Emissions (Metric Tons)",
+                title="Annual Waste-Sector Methane Emissions (2015–2022)",
+                markers=True
+            )
 
-        st.info(
-            "The research document estimates waste-sector "
-            "methane emissions of approximately 40,970–43,110 "
-            "metric tons for 2023–2025. These are estimates, "
-            "not confirmed annual measurements."
-        )
+            waste_fig.update_layout(
+                xaxis_title="Year",
+                yaxis_title="Methane Emissions (Metric Tons)",
+                hovermode="x unified"
+            )
 
-        st.write(
-            "**Connection to Askar Landfill:** The research "
-            "document separately reports that Askar Landfill "
-            "methane emissions peaked at approximately "
-            "14,844 tonnes per year around 2020. This is a "
-            "separate figure and should not be confused with "
-            "the waste-sector series in the graph."
-        )
+            st.plotly_chart(
+                waste_fig,
+                use_container_width=True
+            )
 
-        st.caption(
-            "Source: Climate Watch / Charting the Globe and "
-            "Bahrain's First Biennial Transparency Report to "
-            "the UNFCCC, as referenced in the project research."
-        )
+            st.metric(
+                "Increase from 2015 to 2022",
+                "7,700 metric tons",
+                delta="+23.9%"
+            )
+
+            st.info(
+                "The research document estimates waste-sector "
+                "methane emissions of approximately 40,970–43,110 "
+                "metric tons for 2023–2025. These are estimates, "
+                "not confirmed annual measurements."
+            )
+
+            st.caption(
+                "Source: Climate Watch / Charting the Globe and "
+                "Bahrain's First Biennial Transparency Report to "
+                "the UNFCCC, as referenced in the project research."
+            )
+
+        else:
+
+            st.info(
+                f"Bahrain-specific Awali plume and waste-sector "
+                f"data are not displayed because {selected_country} "
+                "is currently selected."
+            )
 
         st.success(
             "Your environmental investigation is complete!"
         )
-else:
-    st.info(
-        f"Country-specific methane plume and waste-sector "
-        f"data for {selected_country} have not yet been "
-        "added to this investigation."
+
     )
 # --------------------------------------------------
 # 5. UNDERSTANDING METHANE
