@@ -21,31 +21,26 @@ st.set_page_config(
 # PROJECT LOGOS
 # --------------------------------------------------
 
-st.markdown("""
-<style>
-.logo-header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 55px;
-    padding: 15px 0 25px 0;
-}
-</style>
-""", unsafe_allow_html=True)
+from pathlib import Path
+
+ASSETS_DIR = Path(__file__).parent / "assets"
 
 col1, col2, col3 = st.columns([1, 2, 1])
 
+school_logo = ASSETS_DIR / "shgs_logo.png"
+agency_logo = ASSETS_DIR / "bsa_logo.png"
+
 with col1:
-    st.image(
-        "assets/shgs_logo.png",
-        width=150
-    )
+    if school_logo.exists():
+        st.image(str(school_logo), width=150)
+    else:
+        st.warning("School logo not found.")
 
 with col3:
-    st.image(
-        "assets/bsa_logo.png",
-        width=150
-    )
+    if agency_logo.exists():
+        st.image(str(agency_logo), width=150)
+    else:
+        st.warning("Bahrain Space Agency logo not found.")
 
 st.divider()
 
