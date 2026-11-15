@@ -16,14 +16,34 @@ st.set_page_config(
     layout="wide"
 )
 
+# --------------------------------------------------
+# PROJECT PATHS
+# --------------------------------------------------
+
+PROJECT_DIR = Path(__file__).parent
+DATA_DIR = PROJECT_DIR / "data"
+ASSETS_DIR = PROJECT_DIR / "assets"
+
+# Automatically locate NASA CSV files
+def find_dataset_file(keyword):
+    matches = [
+        file for file in DATA_DIR.rglob("*.csv")
+        if keyword.lower() in file.name.lower()
+    ]
+
+    return matches[0] if matches else None
+
+LST_FILE = find_dataset_file("MOD11A2")
+VEG_FILE = find_dataset_file("MOD13Q1")
+
+# NOAA global methane data
+METHANE_URL = (
+    "https://gml.noaa.gov/webdata/ccgg/trends/ch4/ch4_mm_gl.csv"
+)
 
 # --------------------------------------------------
 # PROJECT LOGOS
 # --------------------------------------------------
-
-from pathlib import Path
-
-ASSETS_DIR = Path(__file__).parent / "assets"
 
 col1, col2, col3 = st.columns([1, 2, 1])
 
@@ -32,17 +52,18 @@ agency_logo = ASSETS_DIR / "bsa_logo.png"
 
 with col1:
     if school_logo.exists():
-        st.image(str(school_logo), width=1000)
+        st.image(str(school_logo), width=180)
     else:
         st.warning("School logo not found.")
 
 with col3:
     if agency_logo.exists():
-        st.image(str(agency_logo), width=500)
+        st.image(str(agency_logo), width=180)
     else:
         st.warning("Bahrain Space Agency logo not found.")
 
 st.divider()
+
 # --------------------------------------------------
 # INTRODUCTION
 # --------------------------------------------------
@@ -122,11 +143,10 @@ if video_path.exists():
     st.video(str(video_path))
 else:
     st.warning("Bahrain HeatShield video not found.")
+
 # --------------------------------------------------
 # COUNTRY SELECTOR
 # --------------------------------------------------
-
-st.subheader("🌍 Select a Country")
 
 COUNTRIES = {
     "Bahrain": {
@@ -149,29 +169,39 @@ COUNTRIES = {
     }
 }
 
+st.header("🌍 Select a Country")
+
 selected_country = st.selectbox(
     "Choose a country to investigate:",
-    list(COUNTRIES.keys())
+    list(COUNTRIES.keys()),
+    key="country_selector"
 )
 
-country_bounds = COUNTRIES[selected_country]
-
-st.success(f"Currently investigating: {selected_country}")
-
-
-# COUNTRY INTRODUCTION
-
 country_descriptions = {
-    "Bahrain": "An island nation facing extreme heat, limited vegetation and waste-management challenges.",
-    "Qatar": "A Gulf country experiencing high temperatures, limited vegetation and environmental pressures.",
-    "United Arab Emirates": "A Gulf country facing extreme heat, water scarcity and urban environmental challenges."
+    "Bahrain": (
+        "An island nation facing extreme heat, limited "
+        "vegetation and waste-management challenges."
+    ),
+    "Qatar": (
+        "A Gulf country experiencing high temperatures, "
+        "limited vegetation and environmental pressures."
+    ),
+    "United Arab Emirates": (
+        "A Gulf country facing extreme heat, water scarcity "
+        "and urban environmental challenges."
+    )
 }
 
 st.write(country_descriptions[selected_country])
 
-# GEOGRAPHIC FILTERING
+st.success(f"Currently investigating: {selected_country}")
 
-def filter_by_country(df, lat_col="latitude", lon_col="longitude"):
+# --------------------------------------------------
+# GEOGRAPHIC FILTERING
+# --------------------------------------------------
+
+def filter_by_country(df, lat_col, lon_col):
+
     bounds = COUNTRIES[selected_country]
 
     return df[
@@ -181,16 +211,74 @@ def filter_by_country(df, lat_col="latitude", lon_col="longitude"):
         (df[lon_col] <= bounds["lon_max"])
     ].copy()
 
+
 # --------------------------------------------------
 # NASA DATA PROCESSING
 # --------------------------------------------------
 
 @st.cache_data(show_spinner=False)
-def load_nasa_data(file_path, category):
+def load_nasa_data(file_path, category, country):
 
     df = pd.read_csv(file_path)
 
-    # Prepare the date and measurement columns
+    # Standardise column names
+    df.columns = [str(c).strip() for c in df.columns]
+
+    column_lookup = {
+        c.lower(): c for c in df.columns
+    }
+
+    # Find coordinate columns
+    lat_col = next(
+        (column_lookup[c] for c in ["latitude", "lat", "y"]
+         if c in column_lookup),
+        None
+    )
+
+    lon_col = next(
+        (column_lookup[c] for c in ["longitude", "lon", "long", "x"]
+         if c in column_lookup),
+        None
+    )
+
+    # Country filtering requires coordinates
+    if lat_col is None or lon_col is None:
+        raise ValueError(
+            "Your NASA CSV does not contain latitude and "
+            "longitude columns. Country-specific filtering "
+            "cannot be performed with this file."
+        )
+
+    # Convert coordinates to numbers
+    df[lat_col] = pd.to_numeric(df[lat_col], errors="coerce")
+    df[lon_col] = pd.to_numeric(df[lon_col], errors="coerce")
+
+    # Filter selected country
+    bounds = COUNTRIES[country]
+
+    df = df[
+        (df[lat_col] >= bounds["lat_min"]) &
+        (df[lat_col] <= bounds["lat_max"]) &
+        (df[lon_col] >= bounds["lon_min"]) &
+        (df[lon_col] <= bounds["lon_max"])
+    ].copy()
+
+    if df.empty:
+        raise ValueError(
+            f"No NASA observations were found for {country}. "
+            "Check the dataset's geographic coverage."
+        )
+
+    # Check required columns
+    required = ["Date", "Mean", "Count", "Dataset"]
+
+    for column in required:
+        if column not in df.columns:
+            raise ValueError(
+                f"Missing required column: {column}"
+            )
+
+    # Prepare date and measurement columns
     df["Date"] = pd.to_datetime(
         df["Date"],
         errors="coerce"
@@ -206,7 +294,9 @@ def load_nasa_data(file_path, category):
         errors="coerce"
     )
 
-    # VEGETATION DATA (NDVI)
+    df["Dataset"] = df["Dataset"].astype(str)
+
+    # VEGETATION DATA
     if category == "Vegetation":
 
         df = df[
@@ -218,9 +308,14 @@ def load_nasa_data(file_path, category):
         ].copy()
 
         df["Value"] = df["Mean"]
+
+        # Apply MODIS NDVI scale factor if values are raw
+        if not df.empty and df["Value"].abs().median() > 1:
+            df["Value"] = df["Value"] * 0.0001
+
         df["Series"] = "Vegetation (NDVI)"
 
-    # LAND SURFACE TEMPERATURE DATA
+    # LAND SURFACE TEMPERATURE
     elif category == "Land Surface Temperature (LST)":
 
         df = df[
@@ -231,10 +326,16 @@ def load_nasa_data(file_path, category):
             )
         ].copy()
 
-        # Convert Kelvin to Celsius
-        df["Value"] = df["Mean"] - 273.15
+        # Apply MODIS scale factor if values are raw
+        if not df.empty and df["Mean"].median() > 1000:
+            df["Mean"] = df["Mean"] * 0.02
 
-        # Separate daytime and nighttime readings
+        # Convert Kelvin to Celsius when measurements are in Kelvin
+        if not df.empty and df["Mean"].median() > 100:
+            df["Value"] = df["Mean"] - 273.15
+        else:
+            df["Value"] = df["Mean"]
+
         df["Series"] = (
             df["Dataset"]
             .str.replace("LST_", "", regex=False)
@@ -253,6 +354,7 @@ def load_nasa_data(file_path, category):
     )
 
     return df[["Date", "Value", "Series", "Count"]]
+
 
 # --------------------------------------------------
 # METHANE DATA
@@ -355,12 +457,8 @@ variables = st.multiselect(
 
 st.header("2. Select your geographical country")
 
-selected_country = st.selectbox(
-    "Choose a country to investigate:",
-    list(COUNTRIES.keys()),
-    key="country_selector"
-)
-
+st.header("2. Selected geographical country")
+st.write(f"Current country: {selected_country}")
 
 # --------------------------------------------------
 # 3. SELECT TIME PERIOD
@@ -427,29 +525,28 @@ if st.button(
             st.subheader(category)
 
             if category == "Vegetation":
-                file_path = VEG_FILE
-            else:
-                file_path = LST_FILE
+    file_path = VEG_FILE
+else:
+    file_path = LST_FILE
 
-            if not file_path.exists():
+if file_path is None or not file_path.exists():
 
-                st.error(
-                    f"Dataset not found: {file_path.name}"
-                )
-                continue
-
-           
+    st.error(
+        f"NASA dataset for {category} was not found "
+        "inside the data folder."
+    )
+    continue
             try:
 
                 with st.spinner(
                     f"Processing {category} NASA data..."
                 ):
 
-                    df = load_nasa_data(
-                        str(file_path),
-                        category
-                    )
-
+                   df = load_nasa_data(
+                       str(file_path),
+                       category,
+                       selected_country
+                   )
                 # Filter observations by selected years
                 df = df[
                     (df["Date"].dt.year >= start_year) &
@@ -734,6 +831,8 @@ if st.button(
 
         st.header("🇧🇭 Methane Plumes in Bahrain")
 
+        if selected_country == "Bahrain":
+            
         st.subheader("Awali Oil & Gas")
 
         st.write(
@@ -862,7 +961,12 @@ if st.button(
         st.success(
             "Your environmental investigation is complete!"
         )
-
+else:
+    st.info(
+        f"Country-specific methane plume and waste-sector "
+        f"data for {selected_country} have not yet been "
+        "added to this investigation."
+    )
 # --------------------------------------------------
 # 5. UNDERSTANDING METHANE
 # --------------------------------------------------
