@@ -551,6 +551,37 @@ if st.button(
                     "Recent measurements may be preliminary."
                 )
 
+        
+                st.subheader(
+                    "Historical Changes in Atmospheric Methane (2015–2025)"
+                )
+
+                st.write("""
+                According to the project's research:
+
+                - **2015–2019:** Atmospheric methane concentrations
+                  increased steadily.
+                - **2020–2022:** Methane concentrations increased
+                  more rapidly.
+                - **2023–2025:** Concentrations continued rising,
+                  although the rate of increase became slower.
+
+                The research reports that atmospheric methane
+                increased from approximately 1,834 ppb in 2015
+                to 1,935–1,945 ppb by late 2025.
+
+                This historical pattern helps us understand how
+                methane concentrations have changed over time.
+                """)
+
+                st.info(
+                    "The historical figures and phases above are "
+                    "reported in the project research document. "
+                    "The NOAA graph displays the actual monthly "
+                    "measurements available in the selected period."
+                )
+
+
       
         except Exception as error:
 
