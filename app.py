@@ -271,7 +271,7 @@ def load_methane_data():
         str(column).strip().lower().replace(" ", "_")
         for column in df.columns
     ]
-
+    
     required = {"year", "month", "average"}
 
     if not required.issubset(df.columns):
