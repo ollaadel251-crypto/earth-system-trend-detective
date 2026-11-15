@@ -55,33 +55,24 @@ st.write(
     "temperature, vegetation and methane, turning complex "
     "information into clear evidence for better sustainability decisions."
 )
-# --------------------------------------------------
-# THE ENVIRONMENTAL PROBLEM
-# --------------------------------------------------
+# ENVIRONMENTAL PROBLEM
 
-st.divider()
-
-st.header("⚠️ The Environmental Problem")
+st.header("⚠️ The Environmental Challenge")
 
 st.markdown("""
-Bahrain faces environmental challenges associated with
-high temperatures, urban development and greenhouse gas
-emissions.
-
-Urban areas can experience increased surface temperatures
-because buildings and roads absorb and retain solar energy.
-Limited vegetation can also reduce natural shade and cooling.
-
-Methane is another important concern. It is a powerful
-greenhouse gas released through activities such as waste
-disposal and fossil fuel production. Its accumulation in
-the atmosphere contributes to global warming.
-
-Understanding these challenges requires examining
-environmental data, identifying emission sources and
-considering how human activities influence the environment.
+- Rising population produces more waste, increasing landfill accumulation.
+- Decomposing organic waste releases methane, contributing to global warming.
+- Bahrain's natural gas fields also pose a risk of methane leaks.
+- We use satellite technology to identify risks and help protect our community and environment.
 """)
 
+st.subheader("Our Challenge")
+
+st.write(
+    "Our challenge is to use satellite technology to detect "
+    "methane emissions, identify their sources and protect "
+    "our communities through early detection and informed action."
+)
 # --------------------------------------------------
 # THE PROPOSED SOLUTION
 # --------------------------------------------------
