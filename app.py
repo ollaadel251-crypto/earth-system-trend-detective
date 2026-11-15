@@ -617,6 +617,81 @@ if st.button(
             "plume detections, not annual emissions."
         )
 
+        
+        # --------------------------------------------------
+        # WASTE-SECTOR METHANE EMISSIONS
+        # BAHRAIN
+        # --------------------------------------------------
+
+        st.divider()
+
+        st.subheader("Methane Emissions from Bahrain's Waste Sector")
+
+        st.write(
+            "The project research reports an increase in annual "
+            "waste-sector methane emissions between 2015 and 2022. "
+            "The figures below are based on the annual estimates "
+            "provided in the research document."
+        )
+
+        waste_data = pd.DataFrame({
+            "Year": [
+                2015, 2016, 2017, 2018,
+                2019, 2020, 2021, 2022
+            ],
+            "Methane Emissions (Metric Tons)": [
+                32200, 33700, 34800, 35800,
+                36900, 37800, 38900, 39900
+            ]
+        })
+
+        waste_fig = px.line(
+            waste_data,
+            x="Year",
+            y="Methane Emissions (Metric Tons)",
+            title="Annual Waste-Sector Methane Emissions (2015–2022)",
+            markers=True
+        )
+
+        waste_fig.update_layout(
+            xaxis_title="Year",
+            yaxis_title="Methane Emissions (Metric Tons)",
+            hovermode="x unified"
+        )
+
+        st.plotly_chart(
+            waste_fig,
+            use_container_width=True
+        )
+
+        st.metric(
+            "Increase from 2015 to 2022",
+            "7,700 metric tons",
+            delta="+23.9%"
+        )
+
+        st.info(
+            "The research document estimates waste-sector "
+            "methane emissions of approximately 40,970–43,110 "
+            "metric tons for 2023–2025. These are estimates, "
+            "not confirmed annual measurements."
+        )
+
+        st.write(
+            "**Connection to Askar Landfill:** The research "
+            "document separately reports that Askar Landfill "
+            "methane emissions peaked at approximately "
+            "14,844 tonnes per year around 2020. This is a "
+            "separate figure and should not be confused with "
+            "the waste-sector series in the graph."
+        )
+
+        st.caption(
+            "Source: Climate Watch / Charting the Globe and "
+            "Bahrain's First Biennial Transparency Report to "
+            "the UNFCCC, as referenced in the project research."
+        )
+
         st.success(
             "Your environmental investigation is complete!"
         )
