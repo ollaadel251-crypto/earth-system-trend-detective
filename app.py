@@ -212,66 +212,18 @@ def filter_by_country(df, lat_col, lon_col):
     ].copy()
 
 
+
 # --------------------------------------------------
 # NASA DATA PROCESSING
 # --------------------------------------------------
 
 @st.cache_data(show_spinner=False)
-def load_nasa_data(file_path, category, country):
+def load_nasa_data(file_path, category):
 
     df = pd.read_csv(file_path)
-    
-    st.write("NASA CSV columns:", df.columns.tolist())
-    st.write("First 5 rows:", df.head())
-    # Standardise column names
+
     df.columns = [str(c).strip() for c in df.columns]
 
-    column_lookup = {
-        c.lower(): c for c in df.columns
-    }
-
-    # Find coordinate columns
-    lat_col = next(
-        (column_lookup[c] for c in ["latitude", "lat", "y"]
-         if c in column_lookup),
-        None
-    )
-
-    lon_col = next(
-        (column_lookup[c] for c in ["longitude", "lon", "long", "x"]
-         if c in column_lookup),
-        None
-    )
-
-    # Country filtering requires coordinates
-    if lat_col is None or lon_col is None:
-        raise ValueError(
-            "Your NASA CSV does not contain latitude and "
-            "longitude columns. Country-specific filtering "
-            "cannot be performed with this file."
-        )
-
-    # Convert coordinates to numbers
-    df[lat_col] = pd.to_numeric(df[lat_col], errors="coerce")
-    df[lon_col] = pd.to_numeric(df[lon_col], errors="coerce")
-
-    # Filter selected country
-    bounds = COUNTRIES[country]
-
-    df = df[
-        (df[lat_col] >= bounds["lat_min"]) &
-        (df[lat_col] <= bounds["lat_max"]) &
-        (df[lon_col] >= bounds["lon_min"]) &
-        (df[lon_col] <= bounds["lon_max"])
-    ].copy()
-
-    if df.empty:
-        raise ValueError(
-            f"No NASA observations were found for {country}. "
-            "Check the dataset's geographic coverage."
-        )
-
-    # Check required columns
     required = ["Date", "Mean", "Count", "Dataset"]
 
     for column in required:
@@ -280,7 +232,6 @@ def load_nasa_data(file_path, category, country):
                 f"Missing required column: {column}"
             )
 
-    # Prepare date and measurement columns
     df["Date"] = pd.to_datetime(
         df["Date"],
         errors="coerce"
@@ -311,9 +262,9 @@ def load_nasa_data(file_path, category, country):
 
         df["Value"] = df["Mean"]
 
-        # Apply MODIS NDVI scale factor if values are raw
+        # MODIS NDVI scale factor
         if not df.empty and df["Value"].abs().median() > 1:
-            df["Value"] = df["Value"] * 0.0001
+            df["Value"] *= 0.0001
 
         df["Series"] = "Vegetation (NDVI)"
 
@@ -328,11 +279,11 @@ def load_nasa_data(file_path, category, country):
             )
         ].copy()
 
-        # Apply MODIS scale factor if values are raw
+        # MODIS LST scale factor
         if not df.empty and df["Mean"].median() > 1000:
-            df["Mean"] = df["Mean"] * 0.02
+            df["Mean"] *= 0.02
 
-        # Convert Kelvin to Celsius when measurements are in Kelvin
+        # Convert Kelvin to Celsius
         if not df.empty and df["Mean"].median() > 100:
             df["Value"] = df["Mean"] - 273.15
         else:
@@ -345,7 +296,6 @@ def load_nasa_data(file_path, category, country):
             .str.title()
         )
 
-    # Remove invalid values
     df = df.replace(
         [np.inf, -np.inf],
         np.nan
@@ -356,7 +306,6 @@ def load_nasa_data(file_path, category, country):
     )
 
     return df[["Date", "Value", "Series", "Count"]]
-
 
 # --------------------------------------------------
 # METHANE DATA
@@ -546,9 +495,8 @@ if st.button(
                 ):
 
                     df = load_nasa_data(
-                        str(file_path),
-                        category,
-                        selected_country
+                    str(file_path),
+                    category
                     )
 
                 # Filter observations by selected years
