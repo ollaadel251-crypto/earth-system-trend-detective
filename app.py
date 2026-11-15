@@ -357,7 +357,8 @@ st.header("2. Select your geographical country")
 
 selected_country = st.selectbox(
     "Choose a country to investigate:",
-    list(COUNTRIES.keys())
+    list(COUNTRIES.keys()),
+    key="country_selector"
 )
 
 
