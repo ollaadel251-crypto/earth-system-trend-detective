@@ -1,6 +1,5 @@
 
 import streamlit as st
-import xarray as xr
 import pandas as pd
 import numpy as np
 import plotly.express as px
@@ -24,19 +23,17 @@ PROJECT_DIR = Path(__file__).parent
 DATA_DIR = PROJECT_DIR / "data"
 ASSETS_DIR = PROJECT_DIR / "assets"
 
-# Automatically locate NASA CSV files
 def find_dataset_file(keyword):
     matches = [
         file for file in DATA_DIR.rglob("*.csv")
         if keyword.lower() in file.name.lower()
     ]
-
     return matches[0] if matches else None
+
 
 LST_FILE = find_dataset_file("MOD11A2")
 VEG_FILE = find_dataset_file("MOD13Q1")
 
-# NOAA global methane data
 METHANE_URL = (
     "https://gml.noaa.gov/webdata/ccgg/trends/ch4/ch4_mm_gl.csv"
 )
@@ -67,6 +64,7 @@ st.divider()
 # --------------------------------------------------
 # INTRODUCTION
 # --------------------------------------------------
+
 st.title("🌍 Earth System Trend Detective")
 
 st.write(
@@ -76,6 +74,7 @@ st.write(
     "temperature, vegetation and methane, turning complex "
     "information into clear evidence for better sustainability decisions."
 )
+
 # --------------------------------------------------
 # ENVIRONMENTAL PROBLEM
 # --------------------------------------------------
@@ -96,10 +95,10 @@ st.write(
     "methane emissions, identify their sources and protect "
     "our communities through early detection and informed action."
 )
+
 # --------------------------------------------------
 # THE PROPOSED SOLUTION
 # --------------------------------------------------
-
 
 st.header("💡 Our Proposed Solution")
 
@@ -127,7 +126,9 @@ st.info(
     "and unit clearly."
 )
 
+# --------------------------------------------------
 # BAHRAIN HEATSHIELD VIDEO
+# --------------------------------------------------
 
 st.subheader("🎥 Bahrain HeatShield")
 
@@ -145,73 +146,18 @@ else:
     st.warning("Bahrain HeatShield video not found.")
 
 # --------------------------------------------------
-# COUNTRY SELECTOR
+# BAHRAIN GEOGRAPHICAL FOCUS
 # --------------------------------------------------
 
-COUNTRIES = {
-    "Bahrain": {
-        "lat_min": 25.5,
-        "lat_max": 26.5,
-        "lon_min": 50.3,
-        "lon_max": 50.9
-    },
-    "Qatar": {
-        "lat_min": 24.4,
-        "lat_max": 26.2,
-        "lon_min": 50.6,
-        "lon_max": 51.8
-    },
-    "United Arab Emirates": {
-        "lat_min": 22.5,
-        "lat_max": 26.1,
-        "lon_min": 51.5,
-        "lon_max": 56.5
-    }
-}
+st.header("🇧🇭 Geographical Focus: Bahrain")
 
-st.header("🌍 Select a Country")
-
-selected_country = st.selectbox(
-    "Choose a country to investigate:",
-    list(COUNTRIES.keys()),
-    key="country_selector"
+st.write(
+    "This investigation focuses exclusively on Bahrain, "
+    "an island nation facing extreme heat, limited vegetation "
+    "and waste-management challenges."
 )
 
-country_descriptions = {
-    "Bahrain": (
-        "An island nation facing extreme heat, limited "
-        "vegetation and waste-management challenges."
-    ),
-    "Qatar": (
-        "A Gulf country experiencing high temperatures, "
-        "limited vegetation and environmental pressures."
-    ),
-    "United Arab Emirates": (
-        "A Gulf country facing extreme heat, water scarcity "
-        "and urban environmental challenges."
-    )
-}
-
-st.write(country_descriptions[selected_country])
-
-st.success(f"Currently investigating: {selected_country}")
-
-# --------------------------------------------------
-# GEOGRAPHIC FILTERING
-# --------------------------------------------------
-
-def filter_by_country(df, lat_col, lon_col):
-
-    bounds = COUNTRIES[selected_country]
-
-    return df[
-        (df[lat_col] >= bounds["lat_min"]) &
-        (df[lat_col] <= bounds["lat_max"]) &
-        (df[lon_col] >= bounds["lon_min"]) &
-        (df[lon_col] <= bounds["lon_max"])
-    ].copy()
-
-
+st.success("Currently investigating: Bahrain")
 
 # --------------------------------------------------
 # NASA DATA PROCESSING
@@ -262,7 +208,6 @@ def load_nasa_data(file_path, category):
 
         df["Value"] = df["Mean"]
 
-        # MODIS NDVI scale factor
         if not df.empty and df["Value"].abs().median() > 1:
             df["Value"] *= 0.0001
 
@@ -279,11 +224,9 @@ def load_nasa_data(file_path, category):
             )
         ].copy()
 
-        # MODIS LST scale factor
         if not df.empty and df["Mean"].median() > 1000:
             df["Mean"] *= 0.02
 
-        # Convert Kelvin to Celsius
         if not df.empty and df["Mean"].median() > 100:
             df["Value"] = df["Mean"] - 273.15
         else:
@@ -307,6 +250,7 @@ def load_nasa_data(file_path, category):
 
     return df[["Date", "Value", "Series", "Count"]]
 
+
 # --------------------------------------------------
 # METHANE DATA
 # NOAA GLOBAL MONTHLY MEASUREMENTS
@@ -324,7 +268,7 @@ def load_methane_data():
         str(column).strip().lower().replace(" ", "_")
         for column in df.columns
     ]
-    
+
     required = {"year", "month", "average"}
 
     if not required.issubset(df.columns):
@@ -401,15 +345,13 @@ variables = st.multiselect(
     ]
 )
 
-
 # --------------------------------------------------
-# 2. SELECT COUNTRY
+# 2. GEOGRAPHICAL AREA
 # --------------------------------------------------
 
-st.header("2. Select your geographical country")
+st.header("2. Select your geographical area")
 
-st.header("2. Selected geographical country")
-st.write(f"Current country: {selected_country}")
+st.write("Current geographical focus: **Bahrain 🇧🇭**")
 
 # --------------------------------------------------
 # 3. SELECT TIME PERIOD
@@ -420,7 +362,6 @@ st.header("3. Select your time period")
 col1, col2 = st.columns(2)
 
 with col1:
-
     start_year = st.number_input(
         "Starting year",
         min_value=2000,
@@ -429,14 +370,12 @@ with col1:
     )
 
 with col2:
-
     end_year = st.number_input(
         "Ending year",
         min_value=2001,
         max_value=2026,
         value=2025
     )
-
 
 # --------------------------------------------------
 # INVESTIGATE BUTTON
@@ -467,10 +406,9 @@ if st.button(
         st.header("📊 Your Environmental Investigation")
 
         st.write(
-           f"**Country:** {selected_country}  \n"
+            f"**Country:** Bahrain 🇧🇭  \n"
             f"**Period:** {start_year}–{end_year}"
         )
-        
 
         for category in variables:
 
@@ -482,10 +420,12 @@ if st.button(
                 file_path = LST_FILE
 
             if file_path is None or not file_path.exists():
+
                 st.error(
                     f"NASA dataset for {category} was not found "
                     "inside the data folder."
                 )
+
                 continue
 
             try:
@@ -495,21 +435,22 @@ if st.button(
                 ):
 
                     df = load_nasa_data(
-                    str(file_path),
-                    category
+                        str(file_path),
+                        category
                     )
 
-                # Filter observations by selected years
                 df = df[
                     (df["Date"].dt.year >= start_year) &
                     (df["Date"].dt.year <= end_year)
                 ].copy()
 
                 if df.empty:
+
                     st.warning(
                         "No observations were found for "
                         "the selected period."
                     )
+
                     continue
 
                 st.success(
@@ -540,6 +481,44 @@ if st.button(
                     fig,
                     use_container_width=True
                 )
+
+                # GRAPH EXPLANATION
+                if category == "Vegetation":
+
+                    st.markdown("""
+                    **Graph explanation:**
+
+                    This graph shows changes in vegetation over the
+                    selected period using the Normalized Difference
+                    Vegetation Index (NDVI).
+
+                    NDVI measures vegetation greenness. Higher values
+                    generally indicate denser or healthier green
+                    vegetation, while lower values may indicate sparse
+                    vegetation or less green cover.
+
+                    Observe whether the graph increases, decreases
+                    or remains relatively stable over time.
+                    """)
+
+                else:
+
+                    st.markdown("""
+                    **Graph explanation:**
+
+                    This graph shows changes in land surface
+                    temperature over the selected period.
+
+                    The horizontal axis represents time, while the
+                    vertical axis represents land surface temperature
+                    in degrees Celsius.
+
+                    An increasing trend may indicate that the land
+                    surface is becoming warmer, while a decreasing
+                    trend indicates cooling during the observed period.
+
+                    Look for seasonal patterns and long-term changes.
+                    """)
 
                 col_a, col_b, col_c = st.columns(3)
 
@@ -603,7 +582,7 @@ if st.button(
             methane = methane[
                 (methane["Date"].dt.year >= start_year) &
                 (methane["Date"].dt.year <= end_year)
-            ]
+            ].copy()
 
             if methane.empty:
 
@@ -634,6 +613,20 @@ if st.button(
                     use_container_width=True
                 )
 
+                st.markdown("""
+                **Graph explanation:**
+
+                This graph displays global atmospheric methane
+                concentrations measured over time by NOAA.
+
+                The horizontal axis represents the date, and the
+                vertical axis represents methane concentration
+                in parts per billion (ppb).
+
+                An upward trend indicates that the amount of methane
+                in the global atmosphere is increasing.
+                """)
+
                 latest = methane.iloc[-1]
 
                 st.metric(
@@ -654,7 +647,10 @@ if st.button(
                             trend_data,
                             x="Date",
                             y="trend",
-                            title=f"Smoothed Atmospheric Methane Trend ({start_year}–{end_year})",
+                            title=(
+                                f"Smoothed Atmospheric Methane "
+                                f"Trend ({start_year}–{end_year})"
+                            ),
                             labels={
                                 "Date": "Year",
                                 "trend": "Methane Trend (ppb)"
@@ -666,8 +662,17 @@ if st.button(
                             use_container_width=True
                         )
 
-                
-                # Automatic methane trend interpretation
+                        st.markdown("""
+                        **Smoothed trend explanation:**
+
+                        The smoothed trend reduces short-term
+                        fluctuations and makes the longer-term
+                        direction of atmospheric methane easier
+                        to observe.
+                        """)
+
+                # AUTOMATIC METHANE TREND INTERPRETATION
+
                 methane = methane.sort_values("Date")
 
                 first_reading = methane.iloc[0]
@@ -691,34 +696,37 @@ if st.button(
                 )
 
                 if change > 0:
+
                     st.success(
                         f"Methane concentration increased by "
                         f"{change:.2f} ppb during the selected period."
                     )
 
                 elif change < 0:
+
                     st.info(
                         f"Methane concentration decreased by "
                         f"{abs(change):.2f} ppb during the selected period."
                     )
 
                 else:
+
                     st.info(
                         "Methane concentration remained unchanged "
                         "between the first and last readings."
                     )
 
-
                 st.subheader("Why Is Methane Important?")
+
                 st.write("""
                 Methane (CH₄) is a greenhouse gas that contributes to
                 global warming. It absorbs outgoing infrared radiation
                 from Earth's surface, trapping heat in the atmosphere.
-                
+
                 As atmospheric methane concentrations increase,
                 more heat can be retained in the climate system,
                 contributing to rising global temperatures.
-                
+
                 The graph allows us to observe how global atmospheric
                 methane concentrations change over time.
                 """)
@@ -728,7 +736,6 @@ if st.button(
                     "Recent measurements may be preliminary."
                 )
 
-        
                 st.subheader(
                     "Historical Changes in Atmospheric Methane (2015–2025)"
                 )
@@ -758,149 +765,167 @@ if st.button(
                     "measurements available in the selected period."
                 )
 
-
-      
         except Exception as error:
 
             st.error(
                 f"Could not load methane measurements: {error}"
             )
 
-       
         # --------------------------------------------------
         # BAHRAIN-ONLY METHANE DATA
         # --------------------------------------------------
 
-        if selected_country == "Bahrain":
+        st.divider()
 
-            st.divider()
+        st.header("🇧🇭 Methane Plumes in Bahrain")
 
-            st.header("🇧🇭 Methane Plumes in Bahrain")
+        st.subheader("Awali Oil & Gas")
 
-            st.subheader("Awali Oil & Gas")
+        st.write(
+            "Satellite monitoring identified two large methane "
+            "plume events at Awali Oil & Gas in Bahrain. "
+            "The measurements below show the reported emission "
+            "rates on each detection date."
+        )
 
-            st.write(
-                "Satellite monitoring identified two large methane "
-                "plume events at Awali Oil & Gas in Bahrain. "
-                "The measurements below show the reported emission "
-                "rates on each detection date."
-            )
+        awali_data = pd.DataFrame({
+            "Date": [
+                "12 July 2024",
+                "18 May 2025"
+            ],
+            "Methane Emission Rate (kg/h)": [
+                10018,
+                5578
+            ]
+        })
 
-            awali_data = pd.DataFrame({
-                "Date": [
-                    "12 July 2024",
-                    "18 May 2025"
-                ],
-                "Methane Emission Rate (kg/h)": [
-                    10018,
-                    5578
-                ]
-            })
+        awali_fig = px.bar(
+            awali_data,
+            x="Date",
+            y="Methane Emission Rate (kg/h)",
+            title="Reported Methane Plume Rates at Awali",
+            text="Methane Emission Rate (kg/h)"
+        )
 
-            awali_fig = px.bar(
-                awali_data,
-                x="Date",
-                y="Methane Emission Rate (kg/h)",
-                title="Reported Methane Plume Rates at Awali",
-                text="Methane Emission Rate (kg/h)"
-            )
+        awali_fig.update_traces(
+            texttemplate="%{text:,.0f} kg/h",
+            textposition="outside"
+        )
 
-            awali_fig.update_traces(
-                texttemplate="%{text:,.0f} kg/h",
-                textposition="outside"
-            )
+        awali_fig.update_layout(
+            xaxis_title="Detection Date",
+            yaxis_title="Methane Emission Rate (kg/h)",
+            yaxis_range=[0, 11500]
+        )
 
-            awali_fig.update_layout(
-                xaxis_title="Detection Date",
-                yaxis_title="Methane Emission Rate (kg/h)",
-                yaxis_range=[0, 11500]
-            )
+        st.plotly_chart(
+            awali_fig,
+            use_container_width=True
+        )
 
-            st.plotly_chart(
-                awali_fig,
-                use_container_width=True
-            )
+        st.markdown("""
+        **Graph explanation:**
 
-            st.caption(
-                "Source: UNEP MARS figures as reported in the "
-                "project research document. These are individual "
-                "plume detections, not annual emissions."
-            )
+        This bar chart compares two reported methane plume
+        emission rates detected at Awali Oil & Gas.
 
-            # WASTE-SECTOR METHANE
+        The first detection recorded 10,018 kg/h on 12 July 2024,
+        while the second recorded 5,578 kg/h on 18 May 2025.
 
-            st.divider()
+        The chart shows that the reported rate was lower in the
+        second detection. These two observations alone do not
+        establish a long-term trend.
+        """)
 
-            st.subheader(
-                "Methane Emissions from Bahrain's Waste Sector"
-            )
+        st.caption(
+            "Source: UNEP MARS figures as reported in the "
+            "project research document. These are individual "
+            "plume detections, not annual emissions."
+        )
 
-            st.write(
-                "The project research reports an increase in annual "
-                "waste-sector methane emissions between 2015 and 2022."
-            )
+        # --------------------------------------------------
+        # WASTE-SECTOR METHANE
+        # --------------------------------------------------
 
-            waste_data = pd.DataFrame({
-                "Year": [
-                    2015, 2016, 2017, 2018,
-                    2019, 2020, 2021, 2022
-                ],
-                "Methane Emissions (Metric Tons)": [
-                    32200, 33700, 34800, 35800,
-                    36900, 37800, 38900, 39900
-                ]
-            })
+        st.divider()
 
-            waste_fig = px.line(
-                waste_data,
-                x="Year",
-                y="Methane Emissions (Metric Tons)",
-                title="Annual Waste-Sector Methane Emissions (2015–2022)",
-                markers=True
-            )
+        st.subheader(
+            "Methane Emissions from Bahrain's Waste Sector"
+        )
 
-            waste_fig.update_layout(
-                xaxis_title="Year",
-                yaxis_title="Methane Emissions (Metric Tons)",
-                hovermode="x unified"
-            )
+        st.write(
+            "The project research reports an increase in annual "
+            "waste-sector methane emissions between 2015 and 2022."
+        )
 
-            st.plotly_chart(
-                waste_fig,
-                use_container_width=True
-            )
+        waste_data = pd.DataFrame({
+            "Year": [
+                2015, 2016, 2017, 2018,
+                2019, 2020, 2021, 2022
+            ],
+            "Methane Emissions (Metric Tons)": [
+                32200, 33700, 34800, 35800,
+                36900, 37800, 38900, 39900
+            ]
+        })
 
-            st.metric(
-                "Increase from 2015 to 2022",
-                "7,700 metric tons",
-                delta="+23.9%"
-            )
+        waste_fig = px.line(
+            waste_data,
+            x="Year",
+            y="Methane Emissions (Metric Tons)",
+            title="Annual Waste-Sector Methane Emissions (2015–2022)",
+            markers=True
+        )
 
-            st.info(
-                "The research document estimates waste-sector "
-                "methane emissions of approximately 40,970–43,110 "
-                "metric tons for 2023–2025. These are estimates, "
-                "not confirmed annual measurements."
-            )
+        waste_fig.update_layout(
+            xaxis_title="Year",
+            yaxis_title="Methane Emissions (Metric Tons)",
+            hovermode="x unified"
+        )
 
-            st.caption(
-                "Source: Climate Watch / Charting the Globe and "
-                "Bahrain's First Biennial Transparency Report to "
-                "the UNFCCC, as referenced in the project research."
-            )
+        st.plotly_chart(
+            waste_fig,
+            use_container_width=True
+        )
 
-        else:
+        st.markdown("""
+        **Graph explanation:**
 
-            st.info(
-                f"Bahrain-specific Awali plume and waste-sector "
-                f"data are not displayed because {selected_country} "
-                "is currently selected."
-            )
+        This line graph shows the reported annual methane
+        emissions from Bahrain's waste sector between 2015
+        and 2022.
+
+        The graph indicates an overall increase across the
+        selected years. This suggests that waste-sector methane
+        emissions became higher over the period represented.
+
+        The figures are based on the project's research sources.
+        """)
+
+        st.metric(
+            "Increase from 2015 to 2022",
+            "7,700 metric tons",
+            delta="+23.9%"
+        )
+
+        st.info(
+            "The research document estimates waste-sector "
+            "methane emissions of approximately 40,970–43,110 "
+            "metric tons for 2023–2025. These are estimates, "
+            "not confirmed annual measurements."
+        )
+
+        st.caption(
+            "Source: Climate Watch / Charting the Globe and "
+            "Bahrain's First Biennial Transparency Report to "
+            "the UNFCCC, as referenced in the project research."
+        )
 
         st.success(
             "Your environmental investigation is complete!"
         )
-        
+
+
 # --------------------------------------------------
 # 5. UNDERSTANDING METHANE
 # --------------------------------------------------
@@ -935,17 +960,11 @@ st.write(
     "selected period."
 )
 
-
 # --------------------------------------------------
 # 6. UNDERSTANDING COOLING STRATEGIES
 # --------------------------------------------------
 
 st.divider()
-
-
-# --------------------------------------------------
-# 6. UNDERSTANDING COOLING STRATEGIES
-# --------------------------------------------------
 
 st.header("6. Understanding Cooling Strategies")
 
@@ -954,7 +973,6 @@ st.write(
     "manage energy consumption and improve thermal comfort."
 )
 
-# GREEN INFRASTRUCTURE
 with st.expander("🌳 Green Infrastructure"):
 
     st.write("""
@@ -963,7 +981,6 @@ with st.expander("🌳 Green Infrastructure"):
     spaces can help reduce temperatures in urban areas.
     """)
 
-# COOL ROOFS
 with st.expander("🏠 Cool Roofs"):
 
     st.write("""
@@ -972,7 +989,6 @@ with st.expander("🏠 Cool Roofs"):
     temperatures and reduce cooling demand.
     """)
 
-# URBAN SHADING
 with st.expander("🌿 Urban Shading"):
 
     st.write("""
@@ -981,7 +997,6 @@ with st.expander("🌿 Urban Shading"):
     environments more comfortable.
     """)
 
-# DISTRICT COOLING
 with st.expander("❄️ District Cooling"):
 
     st.write("""
@@ -992,7 +1007,6 @@ with st.expander("❄️ District Cooling"):
     systems in individual buildings.
     """)
 
-# METHANE REDUCTION
 st.subheader("Reducing Methane Emissions")
 
 st.write("""
@@ -1005,7 +1019,6 @@ capturing methane from landfills and improving waste
 management practices.
 """)
 
-# URBAN HEAT ISLAND EFFECT
 st.subheader("Understanding the Urban Heat Island Effect")
 
 st.write("""
@@ -1017,7 +1030,6 @@ Increasing vegetation, using reflective materials and
 creating shaded public spaces can help reduce this effect.
 """)
 
-# ADAPTATION
 st.subheader("Adapting to Rising Temperatures")
 
 st.write("""
@@ -1029,7 +1041,6 @@ cooling centres during periods of extreme heat.
 These measures help reduce people's exposure to heat.
 """)
 
-# BAHRAIN
 st.subheader("Cooling Strategies in Bahrain")
 
 st.write("""
@@ -1054,7 +1065,6 @@ These strategies are relevant to Bahrain's hot climate
 and growing urban environments.
 """)
 
-# MITIGATION VS ADAPTATION
 st.subheader("Mitigation vs Adaptation")
 
 st.write("""
@@ -1066,7 +1076,6 @@ creating cooler urban environments and preparing for heatwaves.
 
 Both approaches are important for responding to climate change.
 """)
-
 
 # --------------------------------------------------
 # 7. MONTROSE VERIPLUME DEVICE
@@ -1082,18 +1091,19 @@ changes over large areas, ground-based monitoring devices
 can help investigate individual methane emission sources.
 """)
 
-with st.expander("🔬 Discover the Montrose VeriPlume Capture System", expanded=True):
+with st.expander(
+    "🔬 Discover the Montrose VeriPlume Capture System",
+    expanded=True
+):
 
     st.subheader("What is the VeriPlume device?")
 
     st.write("""
     The Montrose VeriPlume Capture System is a methane
     monitoring technology developed by Montrose Environmental
-    Group.
-
-    Introduced in January 2026, it is designed to capture
-    and measure emissions from high-volume methane vents,
-    particularly in the oil and gas industry.
+    Group. It is designed to capture and measure emissions
+    from high-volume methane vents, particularly in the
+    oil and gas industry.
     """)
 
     col1, col2 = st.columns(2)
@@ -1135,7 +1145,6 @@ with st.expander("🔬 Discover the Montrose VeriPlume Capture System", expanded
     systems, and its use in Bahrain is a proposed application,
     not an existing deployment.
     """)
-
 
 # --------------------------------------------------
 # 8. PROPOSED SUSTAINABLE SOLUTIONS FOR BAHRAIN
@@ -1200,14 +1209,21 @@ for solution in solutions:
 
     with st.expander(solution["title"]):
 
-        st.markdown(f"**Environmental challenge:** {solution['problem']}")
+        st.markdown(
+            f"**Environmental challenge:** {solution['problem']}"
+        )
 
-        st.markdown(f"**Proposed solution:** {solution['solution']}")
+        st.markdown(
+            f"**Proposed solution:** {solution['solution']}"
+        )
 
-        st.markdown(f"**Expected environmental benefit:** {solution['impact']}")
+        st.markdown(
+            f"**Expected environmental benefit:** {solution['impact']}"
+        )
 
-        st.success(f"Related goals: {solution['sdgs']}")
-
+        st.success(
+            f"Related goals: {solution['sdgs']}"
+        )
 
 # --------------------------------------------------
 # 9. CONNECTIONS TO THE UNITED NATIONS SDGs
@@ -1270,7 +1286,10 @@ sdgs = [
 ]
 
 
-# Find the correct icon inside the assets folder
+# --------------------------------------------------
+# FIND THE CORRECT SDG ICON
+# --------------------------------------------------
+
 def find_sdg_icon(number):
 
     possible_names = [
@@ -1289,11 +1308,22 @@ def find_sdg_icon(number):
         ]:
 
             filename = file.stem.lower()
-            normalized = filename.replace("-", "").replace("_", "").replace(" ", "")
+
+            normalized = (
+                filename
+                .replace("-", "")
+                .replace("_", "")
+                .replace(" ", "")
+            )
 
             for name in possible_names:
 
-                target = name.replace("-", "").replace("_", "").replace(" ", "")
+                target = (
+                    name
+                    .replace("-", "")
+                    .replace("_", "")
+                    .replace(" ", "")
+                )
 
                 if normalized == target or normalized.startswith(target):
                     return file
@@ -1301,7 +1331,10 @@ def find_sdg_icon(number):
     return None
 
 
-# Display the seven SDGs in two columns
+# --------------------------------------------------
+# DISPLAY THE SEVEN SDGs IN TWO COLUMNS
+# --------------------------------------------------
+
 for i in range(0, len(sdgs), 2):
 
     col1, col2 = st.columns(2)
@@ -1315,8 +1348,14 @@ for i in range(0, len(sdgs), 2):
                 icon_path = find_sdg_icon(sdg["number"])
 
                 if icon_path is not None:
-                    st.image(str(icon_path), width=130)
+
+                    st.image(
+                        str(icon_path),
+                        width=130
+                    )
+
                 else:
+
                     st.warning(
                         f"Icon for SDG {sdg['number']} not found. "
                         "Check the assets folder."
@@ -1349,14 +1388,13 @@ st.divider()
 
 st.header("📚 Data Sources")
 
-st.markdown(
-    """
-    - NASA MODIS MOD11A2: Land Surface Temperature.
-    - NASA MODIS MOD13Q1: Vegetation Indices.
-    - NOAA Global Monitoring Laboratory: Atmospheric Methane.
-    - Montrose Environmental Group: VeriPlume Capture System.
-    
-    NASA and NOAA datasets are presented separately because
-    they measure different environmental variables.
-    """
-)
+st.markdown("""
+- NASA MODIS MOD11A2: Land Surface Temperature.
+- NASA MODIS MOD13Q1: Vegetation Indices.
+- NOAA Global Monitoring Laboratory: Atmospheric Methane.
+- UNEP MARS: Methane plume monitoring.
+- Montrose Environmental Group: VeriPlume Capture System.
+
+NASA and NOAA datasets are presented separately because
+they measure different environmental variables.
+""")
