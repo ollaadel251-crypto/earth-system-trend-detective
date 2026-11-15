@@ -359,7 +359,6 @@ selected_country = st.selectbox(
     "Choose a country to investigate:",
     list(COUNTRIES.keys())
 )
-)
 
 
 # --------------------------------------------------
