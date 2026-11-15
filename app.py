@@ -220,7 +220,9 @@ def filter_by_country(df, lat_col, lon_col):
 def load_nasa_data(file_path, category, country):
 
     df = pd.read_csv(file_path)
-
+    
+    st.write("NASA CSV columns:", df.columns.tolist())
+    st.write("First 5 rows:", df.head())
     # Standardise column names
     df.columns = [str(c).strip() for c in df.columns]
 
