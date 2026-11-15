@@ -519,34 +519,32 @@ if st.button(
            f"**Country:** {selected_country}  \n"
             f"**Period:** {start_year}–{end_year}"
         )
-
+        
         for category in variables:
-
+            
             st.subheader(category)
-
+            
             if category == "Vegetation":
-    file_path = VEG_FILE
-else:
-    file_path = LST_FILE
-
-if file_path is None or not file_path.exists():
-
-    st.error(
-        f"NASA dataset for {category} was not found "
-        "inside the data folder."
-    )
-    continue
-            try:
-
-                with st.spinner(
-                    f"Processing {category} NASA data..."
-                ):
-
-                   df = load_nasa_data(
-                       str(file_path),
-                       category,
-                       selected_country
-                   )
+                file_path = VEG_FILE
+            else:
+                file_path = LST_FILE
+                
+            if file_path is None or not file_path.exists():
+                st.error(
+                    f"NASA dataset for {category} was not found "
+                    "inside the data folder."
+                )
+                continue
+                
+        try:
+            with st.spinner(
+                f"Processing {category} NASA data..."
+         ):
+            df = load_nasa_data(
+                str(file_path),
+                category,
+                selected_country
+            )
                 # Filter observations by selected years
                 df = df[
                     (df["Date"].dt.year >= start_year) &
