@@ -1168,88 +1168,105 @@ we can connect scientific investigation to sustainable action.
 
 sdgs = [
     {
-        "number": "SDG 3",
+        "number": 3,
         "name": "Good Health and Well-being",
         "description": "Reducing exposure to extreme heat and air pollution through better environmental management.",
         "connection": "Shaded public spaces, heat adaptation and methane emission reduction."
     },
     {
-        "number": "SDG 7",
+        "number": 7,
         "name": "Affordable and Clean Energy",
         "description": "Supporting more efficient energy use and exploring energy recovery from captured landfill methane.",
         "connection": "Methane recovery and improved energy management."
     },
     {
-        "number": "SDG 9",
+        "number": 9,
         "name": "Industry, Innovation and Infrastructure",
         "description": "Encouraging environmental monitoring technology and more sustainable industrial infrastructure.",
         "connection": "Montrose VeriPlume and improved methane monitoring."
     },
     {
-        "number": "SDG 11",
+        "number": 11,
         "name": "Sustainable Cities and Communities",
         "description": "Developing urban environments that are more resilient to extreme temperatures.",
         "connection": "Urban greening, shaded walkways and reflective building materials."
     },
     {
-        "number": "SDG 12",
+        "number": 12,
         "name": "Responsible Consumption and Production",
         "description": "Improving waste management and reducing biodegradable waste sent to landfills.",
         "connection": "Organic waste separation and composting."
     },
     {
-        "number": "SDG 13",
+        "number": 13,
         "name": "Climate Action",
         "description": "Monitoring greenhouse gas trends and introducing measures to reduce emissions and adapt to climate change.",
         "connection": "Methane detection, methane recovery and urban cooling."
     },
     {
-        "number": "SDG 15",
+        "number": 15,
         "name": "Life on Land",
         "description": "Supporting terrestrial ecosystems and protecting vegetation through sustainable land management.",
         "connection": "Drought-resistant planting and water-efficient landscaping."
     }
 ]
 
+
+# Find the correct icon inside the assets folder
+def find_sdg_icon(number):
+
+    possible_names = [
+        f"sdg{number}",
+        f"sdg{number:02d}",
+        f"goal{number}",
+        f"goal{number:02d}",
+        f"e-web-goal-{number:02d}",
+        f"e-web-goal-{number}"
+    ]
+
+    for file in ASSETS_DIR.rglob("*"):
+
+        if file.is_file() and file.suffix.lower() in [
+            ".png", ".jpg", ".jpeg", ".webp"
+        ]:
+
+            filename = file.stem.lower()
+            normalized = filename.replace("-", "").replace("_", "").replace(" ", "")
+
+            for name in possible_names:
+
+                target = name.replace("-", "").replace("_", "").replace(" ", "")
+
+                if normalized == target or normalized.startswith(target):
+                    return file
+
+    return None
+
+
+# Display the seven SDGs in two columns
 for i in range(0, len(sdgs), 2):
 
     col1, col2 = st.columns(2)
 
     for col, sdg in zip([col1, col2], sdgs[i:i+2]):
 
-        number = int(sdg["number"].split()[-1])
-        image_path = ASSETS_DIR / f"sdg{number}.png"
-
         with col:
+
             with st.container(border=True):
 
-                if image_path.exists():
-                    st.image(str(image_path), width=130)
+                icon_path = find_sdg_icon(sdg["number"])
+
+                if icon_path is not None:
+                    st.image(str(icon_path), width=130)
                 else:
-                    st.warning(f"SDG {number} icon not found.")
+                    st.warning(
+                        f"Icon for SDG {sdg['number']} not found. "
+                        "Check the assets folder."
+                    )
 
-                st.subheader(sdg["number"])
-                st.markdown(f"**{sdg['name']}**")
-                st.write(sdg["description"])
-
-                st.caption(
-                    f"Project connection: {sdg['connection']}"
+                st.subheader(
+                    f"SDG {sdg['number']}: {sdg['name']}"
                 )
-
-    col1, col2 = st.columns(2)
-
-    for col, sdg in zip(
-        [col1, col2],
-        sdgs[i:i+2]
-    ):
-
-        with col:
-
-            with st.container(border=True):
-
-                st.subheader(sdg["number"])
-
-                st.markdown(f"**{sdg['name']}**")
 
                 st.write(sdg["description"])
 
