@@ -1380,21 +1380,55 @@ technology and practical solutions, our project aims to
 support a cooler, greener and more sustainable Bahrain.
 """)
 
+
 # --------------------------------------------------
-# DATA SOURCES
+# DATA SOURCES AND ADDITIONAL RESEARCH RESOURCES
 # --------------------------------------------------
 
 st.divider()
 
 st.header("📚 Data Sources")
 
-st.markdown("""
-- NASA MODIS MOD11A2: Land Surface Temperature.
-- NASA MODIS MOD13Q1: Vegetation Indices.
-- NOAA Global Monitoring Laboratory: Atmospheric Methane.
-- UNEP MARS: Methane plume monitoring.
-- Montrose Environmental Group: VeriPlume Capture System.
+st.subheader("Scientific and Environmental Datasets")
 
-NASA and NOAA datasets are presented separately because
-they measure different environmental variables.
+st.markdown("""
+- [NASA MODIS MOD11A2](https://search.earthdata.nasa.gov/search?q=MOD11A2): Land Surface Temperature.
+- [NASA MODIS MOD13Q1](https://search.earthdata.nasa.gov/search?q=MOD13Q1): Vegetation Indices.
+- [NOAA Global Monitoring Laboratory](https://gml.noaa.gov/ccgg/trends/): Global Atmospheric Methane Measurements.
+- [UNEP MARS](https://www.unep.org/explore-topics/energy/what-we-do/monitoring-methane-emissions): Methane plume monitoring.
 """)
+
+st.subheader("Additional Research Resources")
+
+st.markdown("""
+1. **Kingdom of Bahrain's First Biennial Transparency Report (BTR1) to the UNFCCC**
+
+   Bahrain's official report containing information about national greenhouse gas emissions and climate action.
+
+   [Access the official BTR1 report](https://unfccc.int/documents/655129)
+
+2. **GHGSat – Methane Compared to CO₂**
+
+   An educational resource explaining the differences between methane and carbon dioxide, including their contributions to global warming.
+
+   [Read the GHGSat article](https://www.ghgsat.com/resources/methane-compared-to-co2/)
+
+3. **NASA Earthdata Search**
+
+   NASA's platform for discovering and accessing Earth observation datasets, including MODIS vegetation data.
+
+   [Explore MOD13Q1 on NASA Earthdata](https://search.earthdata.nasa.gov/search?q=MOD13Q1&lat=14.462567921207366&long=32.57053608994562&zoom=1.9955620564830796)
+
+4. **NASA Image and Video Library**
+
+   A collection of NASA images and videos that can support the visual presentation of environmental and scientific topics.
+
+   [Explore NASA Images](https://images.nasa.gov/)
+""")
+
+st.info(
+    "NASA and NOAA datasets are presented separately because "
+    "they measure different environmental variables. Additional "
+    "research resources provide background information and "
+    "support the interpretation of the investigation."
+)
