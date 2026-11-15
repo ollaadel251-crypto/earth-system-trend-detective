@@ -353,11 +353,12 @@ variables = st.multiselect(
 # 2. SELECT REGION
 # --------------------------------------------------
 
-st.header("2. Select your geographical region")
+st.header("2. Select your geographical country")
 
-region = st.selectbox(
-    "Choose a region",
-    list(REGIONS.keys())
+selected_country = st.selectbox(
+    "Choose a country to investigate:",
+    list(COUNTRIES.keys())
+)
 )
 
 
