@@ -16,6 +16,39 @@ st.set_page_config(
     layout="wide"
 )
 
+
+# --------------------------------------------------
+# PROJECT LOGOS
+# --------------------------------------------------
+
+st.markdown("""
+<style>
+.logo-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 55px;
+    padding: 15px 0 25px 0;
+}
+</style>
+""", unsafe_allow_html=True)
+
+col1, col2, col3 = st.columns([1, 2, 1])
+
+with col1:
+    st.image(
+        "assets/shgs_logo.png",
+        width=150
+    )
+
+with col3:
+    st.image(
+        "assets/bsa_logo.png",
+        width=150
+    )
+
+st.divider()
+
 # --------------------------------------------------
 # INTRODUCTION
 # --------------------------------------------------
