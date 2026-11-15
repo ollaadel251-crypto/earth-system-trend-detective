@@ -1215,6 +1215,29 @@ for i in range(0, len(sdgs), 2):
 
     col1, col2 = st.columns(2)
 
+    for col, sdg in zip([col1, col2], sdgs[i:i+2]):
+
+        number = int(sdg["number"].split()[-1])
+        image_path = ASSETS_DIR / f"sdg{number}.png"
+
+        with col:
+            with st.container(border=True):
+
+                if image_path.exists():
+                    st.image(str(image_path), width=130)
+                else:
+                    st.warning(f"SDG {number} icon not found.")
+
+                st.subheader(sdg["number"])
+                st.markdown(f"**{sdg['name']}**")
+                st.write(sdg["description"])
+
+                st.caption(
+                    f"Project connection: {sdg['connection']}"
+                )
+
+    col1, col2 = st.columns(2)
+
     for col, sdg in zip(
         [col1, col2],
         sdgs[i:i+2]
