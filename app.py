@@ -520,39 +520,40 @@ if st.button(
             f"**Period:** {start_year}–{end_year}"
         )
         
+
         for category in variables:
-            
+
             st.subheader(category)
-            
+
             if category == "Vegetation":
                 file_path = VEG_FILE
             else:
                 file_path = LST_FILE
-                
+
             if file_path is None or not file_path.exists():
                 st.error(
                     f"NASA dataset for {category} was not found "
                     "inside the data folder."
                 )
                 continue
-                
-           try:
 
-        with st.spinner(
-            f"Processing {category} NASA data..."
-        ):
+            try:
 
-            df = load_nasa_data(
-                str(file_path),
-                category,
-                selected_country
-            )
+                with st.spinner(
+                    f"Processing {category} NASA data..."
+                ):
 
-        # Filter observations by selected years
-        df = df[
-            (df["Date"].dt.year >= start_year) &
-            (df["Date"].dt.year <= end_year)
-        ].copy()
+                    df = load_nasa_data(
+                        str(file_path),
+                        category,
+                        selected_country
+                    )
+
+                # Filter observations by selected years
+                df = df[
+                    (df["Date"].dt.year >= start_year) &
+                    (df["Date"].dt.year <= end_year)
+                ].copy()
 
                 if df.empty:
                     st.warning(
@@ -563,13 +564,6 @@ if st.button(
 
                 st.success(
                     f"Successfully processed {category}"
-                )
-
-                st.caption(
-                    "The graph represents the geographical area "
-                    "contained in the uploaded NASA dataset. "
-                    "The region selector does not spatially filter "
-                    "these CSV observations."
                 )
 
                 if category == "Vegetation":
@@ -620,7 +614,6 @@ if st.button(
                     df,
                     use_container_width=True
                 )
-
 
             except Exception as error:
 
