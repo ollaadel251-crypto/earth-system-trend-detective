@@ -950,8 +950,7 @@ if st.button(
         st.success(
             "Your environmental investigation is complete!"
         )
-
-    )
+        
 # --------------------------------------------------
 # 5. UNDERSTANDING METHANE
 # --------------------------------------------------
